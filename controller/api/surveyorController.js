@@ -178,3 +178,88 @@ exports.surveyorLogin=async(req,res,next)=>{
         return res.status(503).json({status:false,message:'Internal Server Error',surveyor:{}})
     }
 }
+
+
+// get surveyor by services id and date
+exports.getSurveyorByServiceIdAndDate = async (req, res, next) => {
+    try {
+        let {date,service_id}=req.query
+        db.beginTransaction(async (err) => {
+            if (err) {
+                return res.status(503).json({ status: false, message: 'Internal Server Error', surveyors: [] });
+            }
+
+            try {
+                const get_surveyors_query = `SELECT surveyors.*,
+                d.*,
+                di.*,
+                u.*
+                FROM surveyors
+                INNER JOIN divisions as d ON surveyors.surveyor_division=d.division_id
+                INNER JOIN districts as di ON surveyors.surveyor_district=di.district_id
+                INNER JOIN upzilas as u ON surveyors.surveyor_upzila=u.upzila_id
+                JOIN surveyor_experiences ON surveyors.surveyor_id=surveyor_experiences.surveyor_id
+                WHERE surveyors.surveyor_id NOT IN (
+                    SELECT appointment.surveyor_id
+                    FROM appointment
+                    WHERE appointment.appointment_date = ?
+                )
+                AND surveyors.surveyor_is_approved=1 AND surveyor_experiences.service_id=?`;
+                const values=[date,service_id]
+                const surveyors = await queryAsync(get_surveyors_query,values);
+                if (surveyors.length === 0) {
+                    return res.status(200).json({ status: true, message: 'Surveyors not found', surveyors: [] });
+                }
+
+                const nestedJsonData={
+                    data:surveyors.map((surveyor=>({
+                        surveyor_id:surveyor.surveyor_id,
+                        surveyor_name:surveyor.surveyor_name,
+                        surveyor_image:surveyor.surveyor_image,
+                        surveyor_mobile_number:surveyor.surveyor_mobile_number,
+                        surveyor_password:surveyor.surveyor_password,
+                        surveyor_address:surveyor.surveyor_address,
+                        surveyor_is_approved:surveyor.surveyor_is_approved,
+                        surveyor_createdAt:surveyor.surveyor_createdAt,
+                        surveyor_updatedAt:surveyor.surveyor_updatedAt,
+                        division:{
+                            division_id:surveyor.division_id,
+                            division_name:surveyor.division_name,
+                            division_createdAt:surveyor.division_createdAt,
+                            division_updatedAt:surveyor.division_updatedAt,
+                            district:{
+                                district_id:surveyor.district_id,
+                                district_name:surveyor.district_name,
+                                district_createdAt:surveyor.district_createdAt,
+                                district_updatedAt:surveyor.district_updatedAt,
+                                upzila:{
+                                    upzila_id:surveyor.upzila_id,
+                                    upzila_name:surveyor.upzila_name,
+                                    upzila_createdAt:surveyor.upzila_createdAt,
+                                    upzila_updatedAt:surveyor.upzila_updatedAt
+                                }
+                            },
+                        },
+                    })))
+                }
+                db.commit((err) => {
+                    if (err) {
+                        db.rollback(() => {
+                            return res.status(500).json({ status: false, message: 'Failed to find Surveyors', surveyors: [] });
+                        });
+                    }
+
+                    return res.status(200).json({ status: true, message: '', surveyors: nestedJsonData.data });
+                });
+            } catch (e) {
+                console.log(e);
+                db.rollback();
+                return res.status(503).json({ status: false, message: 'Internal Server Error', surveyors: [] });
+            }
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(503).json({ status: false, message: 'Internal Server Error', surveyors: [] });
+    }
+};
+

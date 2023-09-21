@@ -11,7 +11,7 @@ const {getDivisionDistrictUpzila}=require('../../controller/api/locationControll
 const {customerRegistration,customerLogin}=require('../../controller/api/customerController')
 
 // surveyor controller 
-const {surveyorRegistration,surveyorLogin}=require('../../controller/api/surveyorController')
+const {surveyorRegistration,surveyorLogin,getSurveyorByServiceIdAndDate}=require('../../controller/api/surveyorController')
 
 // our services
 const {getOurServices}=require('../../controller/api/ourServiceController')
@@ -19,7 +19,8 @@ const {getOurServices}=require('../../controller/api/ourServiceController')
 // surveyor experience
 const {createSurveyorExperience}=require('../../controller/api/surveyorExperienceController')
 
-
+// appointment
+const {getAppointmentStatus,createAppointment,createTransaction}=require('../../controller/api/appointmentController')
 
 
 
@@ -48,6 +49,8 @@ router.post('/customer/auth/login',customerLogin)
 router.post('/surveyor/auth/registration',upload.single('surveyor-profile-image'),surveyorRegistration)
 // for surveyor login
 router.post('/surveyor/auth/login',surveyorLogin)
+// for get surveyors by service id and date 
+router.get('/surveyors/service-id-and-date',getSurveyorByServiceIdAndDate)
 
 // ----------------------------------------------------------surveyor--------------------------------------------------------------
 
@@ -67,6 +70,18 @@ router.get('/our-services',getOurServices)
 router.post('/surveyor-experience/create',createSurveyorExperience)
 
 // ----------------------------------------------------------surveyor services--------------------------------------------------------------
+
+
+
+// ----------------------------------------------------------appointment--------------------------------------------------------------
+// get appointment status 
+router.get('/appointment-status',getAppointmentStatus)
+// for surveyor experience create 
+router.post('/appointment/create',createAppointment)
+// for insert transaction
+router.post('/transaction/create',createTransaction)
+
+// ----------------------------------------------------------appointment--------------------------------------------------------------
 
 
 
