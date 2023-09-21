@@ -11,7 +11,7 @@ const {getDivisionDistrictUpzila}=require('../../controller/api/locationControll
 const {customerRegistration,customerLogin}=require('../../controller/api/customerController')
 
 // surveyor controller 
-const {surveyorRegistration,surveyorLogin,getSurveyorByServiceIdAndDate}=require('../../controller/api/surveyorController')
+const {surveyorRegistration,surveyorLogin,getSurveyorByServiceIdAndDate,getAllSurveyors}=require('../../controller/api/surveyorController')
 
 // our services
 const {getOurServices}=require('../../controller/api/ourServiceController')
@@ -51,6 +51,8 @@ router.post('/surveyor/auth/registration',upload.single('surveyor-profile-image'
 router.post('/surveyor/auth/login',surveyorLogin)
 // for get surveyors by service id and date 
 router.get('/surveyors/service-id-and-date',getSurveyorByServiceIdAndDate)
+// for get all Surveyors
+router.get('/surveyors',getAllSurveyors)
 
 // ----------------------------------------------------------surveyor--------------------------------------------------------------
 
