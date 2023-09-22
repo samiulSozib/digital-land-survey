@@ -177,3 +177,165 @@ exports.customerLogin=async(req,res,next)=>{
     }
 }
 
+// get customer profile
+exports.getCustomerProfile=async(req,res,next)=>{
+    try {
+        const id = req.query.customer_id; 
+
+        db.beginTransaction(async (err) => {
+            if (err) {
+                return res.status(503).json({ status: false, message: 'Internal Server Error', customer: {} });
+            }
+
+            try {
+                const get_customer_query = `SELECT c.*,
+                                        d.*,
+                                        di.*,
+                                        u.*
+                                        FROM customers as c
+                                        INNER JOIN divisions as d ON c.customer_division=d.division_id
+                                        INNER JOIN districts as di ON c.customer_district=di.district_id
+                                        INNER JOIN upzilas as u ON c.customer_upzila=u.upzila_id WHERE c.customer_id = ?`; 
+                const customer = await queryAsync(get_customer_query, [id]);
+
+                if (customer.length === 0) {
+                    return res.status(200).json({ status: false, message: 'No customer found', customer: {} });
+                }
+
+                const nestedJsonData={
+                    data:{
+                        customer_id:customer[0].customer_id,
+                        customer_name:customer[0].customer_name,
+                        customer_image:customer[0].customer_image,
+                        customer_mobile_number:customer[0].customer_mobile_number,
+                        customer_password:customer[0].customer_password,
+                        customer_address:customer[0].customer_address,
+                        customer_createdAt:customer[0].customer_createdAt,
+                        customer_updatedAt:customer[0].customer_updatedAt,
+                        division:{
+                            division_id:customer[0].division_id,
+                            division_name:customer[0].division_name,
+                            division_createdAt:customer[0].division_createdAt,
+                            division_updatedAt:customer[0].division_updatedAt,
+                            district:{
+                                district_id:customer[0].district_id,
+                                district_name:customer[0].district_name,
+                                district_createdAt:customer[0].district_createdAt,
+                                district_updatedAt:customer[0].district_updatedAt,
+                                upzila:{
+                                    upzila_id:customer[0].upzila_id,
+                                    upzila_name:customer[0].upzila_name,
+                                    upzila_createdAt:customer[0].upzila_createdAt,
+                                    upzila_updatedAt:customer[0].upzila_updatedAt
+                                }
+                            },
+                        },
+                    }
+                }
+                db.commit((err) => {
+                    if (err) {
+                        db.rollback(() => {
+                            return res.status(500).json({ status: false, message: 'Failed to find customer', customer: {} });
+                        });
+                    }
+
+                    return res.status(200).json({ status: true, message: '', customer: nestedJsonData.data });
+                });
+            } catch (e) {
+                console.log(e);
+                return res.status(503).json({ status: false, message: 'Internal Server Error', customer: {} });
+            }
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(503).json({ status: false, message: 'Internal Server Error', customer: {} });
+    }
+}
+
+// update customer profile
+exports.updateCustomerProfile = async (req, res, next) => {
+    try {
+        const id = req.query.customer_id;
+        let {name,mobile_number,division,district,upzila,address}=req.body
+
+        db.beginTransaction(async (err) => {
+            if (err) {
+                return res.status(503).json({ status: false, message: 'Internal Server Error', customer: {} });
+            }
+
+            try {
+                const get_customer_query = 'SELECT * FROM customers WHERE customer_id = ?';
+                const existing_customer = await queryAsync(get_customer_query, [id]);
+
+                if (existing_customer.length === 0) {
+                    return res.status(200).json({ status: false, message: 'No customer found', customer: {} });
+                }
+
+                let image=existing_customer[0].image
+                if(req.file){
+                    image=`${base_url}/uploads/${req.file.filename}`
+                }
+
+                const update_customer_query = 'UPDATE customers SET customer_name = ?,customer_image=?, customer_mobile_number = ?,customer_division = ?, customer_district = ?,customer_upzila=?, customer_address=? WHERE customer_id = ?';
+                const updateValues = [name,image, mobile_number,division,district,upzila,address, id];
+                await queryAsync(update_customer_query, updateValues);
+
+                const get_updated_customer_query = `SELECT c.*,
+                d.*,
+                di.*,
+                u.*
+                FROM customers as c
+                INNER JOIN divisions as d ON c.customer_division=d.division_id
+                INNER JOIN districts as di ON c.customer_district=di.district_id
+                INNER JOIN upzilas as u ON c.customer_upzila=u.upzila_id WHERE c.customer_id = ?`;
+                const customer = await queryAsync(get_updated_customer_query, [id]);
+                const nestedJsonData={
+                    data:{
+                        customer_id:customer[0].customer_id,
+                        customer_name:customer[0].customer_name,
+                        customer_image:customer[0].customer_image,
+                        customer_mobile_number:customer[0].customer_mobile_number,
+                        customer_password:customer[0].customer_password,
+                        customer_address:customer[0].customer_address,
+                        customer_createdAt:customer[0].customer_createdAt,
+                        customer_updatedAt:customer[0].customer_updatedAt,
+                        division:{
+                            division_id:customer[0].division_id,
+                            division_name:customer[0].division_name,
+                            division_createdAt:customer[0].division_createdAt,
+                            division_updatedAt:customer[0].division_updatedAt,
+                            district:{
+                                district_id:customer[0].district_id,
+                                district_name:customer[0].district_name,
+                                district_createdAt:customer[0].district_createdAt,
+                                district_updatedAt:customer[0].district_updatedAt,
+                                upzila:{
+                                    upzila_id:customer[0].upzila_id,
+                                    upzila_name:customer[0].upzila_name,
+                                    upzila_createdAt:customer[0].upzila_createdAt,
+                                    upzila_updatedAt:customer[0].upzila_updatedAt
+                                }
+                            },
+                        },
+                    }
+                }
+                db.commit((err) => {
+                    if (err) {
+                        db.rollback(() => {
+                            return res.status(500).json({ status: false, message: 'Failed to update customer profile', customer: {} });
+                        });
+                    }
+
+                    return res.status(200).json({ status: true, message: '', customer: nestedJsonData.data });
+                });
+            } catch (e) {
+                console.log(e);
+                db.rollback();
+                return res.status(503).json({ status: false, message: 'Internal Server Error', customer: {} });
+            }
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(503).json({ status: false, message: 'Internal Server Error', customer: {} });
+    }
+};

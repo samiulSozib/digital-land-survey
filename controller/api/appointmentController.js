@@ -85,8 +85,8 @@ exports.createTransaction=async(req,res,next)=>{
             }
             try{
                 
-                const insert_transaction_query='INSERT INTO transaction (appointment_id,account_number,account_type,amount,transaction_id,address) VALUES (?,?,?,?,?,?)'
-                const values=[appointment_id,account_number,account_type,amount,transaction_id,address]
+                const insert_transaction_query='INSERT INTO transaction (appointment_id,account_number,account_type,amount,transaction_id,address,is_verified) VALUES (?,?,?,?,?,?,?)'
+                const values=[appointment_id,account_number,account_type,amount,transaction_id,address,0]
                 const created_transaction=await queryAsync(insert_transaction_query,values)
                 const id=created_transaction.insertId
                 const get_created_transaction='SELECT * FROM transaction WHERE id=?'
@@ -98,7 +98,7 @@ exports.createTransaction=async(req,res,next)=>{
                 // const appointment=await queryAsync(get_appointment_query,[appointment_id])
 
                 const update_appointment_query=`UPDATE appointment SET appointment_status= ? WHERE appointment_id=?`
-                const appointment_values=[3,appointment_id]
+                const appointment_values=[2,appointment_id]
                 const update_appointment=await queryAsync(update_appointment_query,appointment_values)
                 
                 db.commit((err)=>{

@@ -198,13 +198,14 @@ exports.getSurveyorByServiceIdAndDate = async (req, res, next) => {
                 INNER JOIN divisions as d ON surveyors.surveyor_division=d.division_id
                 INNER JOIN districts as di ON surveyors.surveyor_district=di.district_id
                 INNER JOIN upzilas as u ON surveyors.surveyor_upzila=u.upzila_id
+                INNER JOIN surveyor_transaction ON surveyors.surveyor_id=surveyor_transaction.surveyor_id
                 JOIN surveyor_experiences ON surveyors.surveyor_id=surveyor_experiences.surveyor_id
                 WHERE surveyors.surveyor_id NOT IN (
                     SELECT appointment.surveyor_id
                     FROM appointment
                     WHERE appointment.appointment_date = ?
                 )
-                AND surveyors.surveyor_is_approved=1 AND surveyor_experiences.service_id=?`;
+                AND surveyors.surveyor_is_approved=1 AND surveyor_transaction.is_verified=1 AND surveyor_experiences.service_id=?`;
                 const values=[date,service_id]
                 const surveyors = await queryAsync(get_surveyors_query,values);
                 if (surveyors.length === 0) {
@@ -280,8 +281,8 @@ exports.getAllSurveyors = async (req, res, next) => {
                 INNER JOIN divisions as d ON surveyors.surveyor_division=d.division_id
                 INNER JOIN districts as di ON surveyors.surveyor_district=di.district_id
                 INNER JOIN upzilas as u ON surveyors.surveyor_upzila=u.upzila_id
-                
-                WHERE surveyors.surveyor_is_approved=1`;
+                INNER JOIN surveyor_transaction ON surveyors.surveyor_id=surveyor_transaction.surveyor_id
+                WHERE surveyors.surveyor_is_approved=1 AND surveyor_transaction.is_verified=1`;
                 
                 const surveyors = await queryAsyncWithoutValue(get_surveyors_query);
                 if (surveyors.length === 0) {
@@ -339,3 +340,123 @@ exports.getAllSurveyors = async (req, res, next) => {
         return res.status(503).json({ status: false, message: 'Internal Server Error', surveyors: [] });
     }
 };
+
+
+// get all surveyors 
+exports.getSurveyorById = async (req, res, next) => {
+    try {
+        let id=req.query.surveyor_id
+        db.beginTransaction(async (err) => {
+            if (err) {
+                return res.status(503).json({ status: false, message: 'Internal Server Error', surveyor: {} });
+            }
+
+            try {
+                const get_surveyors_query = `SELECT surveyors.*,
+                d.*,
+                di.*,
+                u.*
+                FROM surveyors
+                INNER JOIN divisions as d ON surveyors.surveyor_division=d.division_id
+                INNER JOIN districts as di ON surveyors.surveyor_district=di.district_id
+                INNER JOIN upzilas as u ON surveyors.surveyor_upzila=u.upzila_id
+                INNER JOIN surveyor_transaction ON surveyors.surveyor_id=surveyor_transaction.surveyor_id
+                WHERE surveyors.surveyor_id=? AND surveyors.surveyor_is_approved=1 AND surveyor_transaction.is_verified=1`;
+                
+                const surveyor = await queryAsync(get_surveyors_query,[id]);
+                if (surveyor.length === 0) {
+                    return res.status(200).json({ status: true, message: 'Surveyors not found', surveyor: {} });
+                }
+
+                const nestedJsonData={
+                    data:{
+                        surveyor_id:surveyor[0].surveyor_id,
+                        surveyor_name:surveyor[0].surveyor_name,
+                        surveyor_image:surveyor[0].surveyor_image,
+                        surveyor_mobile_number:surveyor[0].surveyor_mobile_number,
+                        surveyor_password:surveyor[0].surveyor_password,
+                        surveyor_address:surveyor[0].surveyor_address,
+                        surveyor_is_approved:surveyor[0].surveyor_is_approved,
+                        surveyor_createdAt:surveyor[0].surveyor_createdAt,
+                        surveyor_updatedAt:surveyor[0].surveyor_updatedAt,
+                        division:{
+                            division_id:surveyor[0].division_id,
+                            division_name:surveyor[0].division_name,
+                            division_createdAt:surveyor[0].division_createdAt,
+                            division_updatedAt:surveyor[0].division_updatedAt,
+                            district:{
+                                district_id:surveyor[0].district_id,
+                                district_name:surveyor[0].district_name,
+                                district_createdAt:surveyor[0].district_createdAt,
+                                district_updatedAt:surveyor[0].district_updatedAt,
+                                upzila:{
+                                    upzila_id:surveyor[0].upzila_id,
+                                    upzila_name:surveyor[0].upzila_name,
+                                    upzila_createdAt:surveyor[0].upzila_createdAt,
+                                    upzila_updatedAt:surveyor[0].upzila_updatedAt
+                                }
+                            },
+                        },
+                    }
+                }
+                db.commit((err) => {
+                    if (err) {
+                        db.rollback(() => {
+                            return res.status(500).json({ status: false, message: 'Failed to find Surveyors', surveyors: {} });
+                        });
+                    }
+
+                    return res.status(200).json({ status: true, message: '', surveyor: nestedJsonData.data });
+                });
+            } catch (e) {
+                console.log(e);
+                db.rollback();
+                return res.status(503).json({ status: false, message: 'Internal Server Error', surveyor: {} });
+            }
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(503).json({ status: false, message: 'Internal Server Error', surveyor: {} });
+    }
+};
+
+
+// create transaction for surveyor
+exports.createSurveyorTransaction=async(req,res,next)=>{
+    try{
+        let {surveyor_id,account_number,account_type,amount,transaction_id}=req.body
+        db.beginTransaction(async(err)=>{
+            if(err){
+                return res.status(503).json({status:false,message:'Internal Server Error',transaction:{}})
+            }
+            try{
+                
+                const insert_transaction_query='INSERT INTO surveyor_transaction (surveyor_id,account_number,account_type,amount,transaction_id,is_verified) VALUES (?,?,?,?,?,?)'
+                const values=[surveyor_id,account_number,account_type,amount,transaction_id,0]
+                const created_transaction=await queryAsync(insert_transaction_query,values)
+                const id=created_transaction.insertId
+                const get_created_transaction='SELECT * FROM surveyor_transaction WHERE id=?'
+                const transaction_data=await queryAsync(get_created_transaction,[id])
+
+                db.commit((err)=>{
+                    if(err){
+                        db.rollback(()=>{
+                            return res.status(500).json({status:false,message:'Failed to insert transaction',transaction:{}})
+                        })
+                    }
+                    
+                    return res.status(200).json({status:true,message:'',transaction:transaction_data[0]})
+                })
+            }catch(e){
+                console.log(e)
+                db.rollback();
+                return res.status(503).json({ status: false, message: 'Internal Server Error', transaction: {} });
+            }
+
+        })
+    }catch(e){
+        console.log(e)
+        return res.status(503).json({status:false,message:'Internal Server Error',transaction:{}})
+    }
+}
+

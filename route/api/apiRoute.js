@@ -8,10 +8,10 @@ const upload=require('../../middleware/upload')
 const {getDivisionDistrictUpzila}=require('../../controller/api/locationController')
 
 // customer controller 
-const {customerRegistration,customerLogin}=require('../../controller/api/customerController')
+const {customerRegistration,customerLogin,getCustomerProfile,updateCustomerProfile}=require('../../controller/api/customerController')
 
 // surveyor controller 
-const {surveyorRegistration,surveyorLogin,getSurveyorByServiceIdAndDate,getAllSurveyors}=require('../../controller/api/surveyorController')
+const {surveyorRegistration,surveyorLogin,getSurveyorByServiceIdAndDate,getAllSurveyors,getSurveyorById,createSurveyorTransaction}=require('../../controller/api/surveyorController')
 
 // our services
 const {getOurServices}=require('../../controller/api/ourServiceController')
@@ -39,6 +39,10 @@ router.get('/locations',getDivisionDistrictUpzila)
 router.post('/customer/auth/registration',upload.single('customer-profile-image'),customerRegistration)
 // for customer loign 
 router.post('/customer/auth/login',customerLogin)
+// for customer profile
+router.get('/customer/profile',getCustomerProfile)
+// for customer profile update 
+router.post('/customer/profile/update',upload.single('customer-profile-image'),updateCustomerProfile)
 
 // ----------------------------------------------------------customer--------------------------------------------------------------
 
@@ -53,6 +57,10 @@ router.post('/surveyor/auth/login',surveyorLogin)
 router.get('/surveyors/service-id-and-date',getSurveyorByServiceIdAndDate)
 // for get all Surveyors
 router.get('/surveyors',getAllSurveyors)
+// for get surveyor by id 
+router.get('/surveyor',getSurveyorById)
+// for surveyor transaction
+router.post('/surveyor/transaction-create',createSurveyorTransaction)
 
 // ----------------------------------------------------------surveyor--------------------------------------------------------------
 
