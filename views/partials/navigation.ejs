@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="shortcut icon" type="x-icon" href="img/site-icon.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/output.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+<body class="font-sans">
+  <section class=" max-w-[1920px] ml-auto mr-auto">
+
+    <!-- Navigation Menu -->
+    <div class="relative">
+        
+      <nav class="bg-white xl:bg-transparent fixed min-[2000px]:absolute top-0 flex flex-row xl:flex-col justify-between xl:h-full custom-container shadow-sm xl:shadow-none w-full xl:w-fit z-10">
+          
+          <div class="">
+
+              <a href="/"><img class="h-10 xl:h-28 2xl:h-32 mx-0 xl:mx-5 my-2 xl:my-5" src="img/Logo.png" alt=""></a>
+
+              <div class="bg-white xl:bg-transparent hidden xl:grid absolute xl:static top-6 right-0 z-10 rounded-sm py-5 xl:py-0 2xl:py-5 max-h-[800px] xl:max-h-[470px] 2xl:max-h-[750px] overflow-y-auto scroll-h min-w-[195px] scroll-smooth shadow-md xl:shadow-none mt-5 px-5" id="toggle-menu">
+
+                <span class="text-xs text-tColor mb-2">MAIN MENU</span>
+                <a class="menu-list <%= nav==="dashboard"?"menu-list-active":"" %>" href="/">
+                  <div class="h-5 w-5 flex items-center justify-center"><i class="fa-solid fa-table-columns"></i></div>
+                  <span>Dashboard</span>
+                </a>
+
+                <a class="menu-list <%= nav==="customers"?"menu-list-active":"" %>" href="/customer-list">
+                  <div class="h-5 w-5 flex items-center justify-center"><i class="fa-solid fa-user"></i></div>
+                  <span>Customer</span>
+                </a>
+
+                <a class="menu-list <%= nav==="surveyors"?"menu-list-active":"" %>" href="/surveyor-list">
+                  <div class="h-5 w-5 flex items-center justify-center"><i class="fa-solid fa-circle-user"></i></div>
+                  <span>Survey Man</span>
+                </a>
+
+                <a class="menu-list <%= nav==="surveyor_transaction"?"menu-list-active":"" %>" href="/surveyor-transaction-list">
+                  <div class="h-5 w-5 flex items-center justify-center"><i class="fa-solid fa-credit-card"></i></div>
+                  <span>Surveyor Transaction</span>
+                </a>
+
+                <!-- <a class="menu-list" href="postList.html">
+                  <div class="h-5 w-5 flex items-center justify-center"><i class="fa-solid fa-file-lines"></i></div>
+                  <span>Post List</span>
+                </a> -->
+
+                <a class="menu-list <%= nav==="services"?"menu-list-active":"" %>" href="/service-list">
+                  <div class="h-5 w-5 flex items-center justify-center"><i class="fa-solid fa-gear"></i></div>
+                  <span>Service List</span>
+                </a>
+
+                <!-- <a class="menu-list" href="orderManagement.html">
+                  <div class="h-5 w-5 flex items-center justify-center"><i class="fa-solid fa-cart-shopping"></i></div>
+                  <span>Order Management</span>
+                </a> -->
+
+                
+
+                <a class="menu-list <%= nav==="appointments"?"menu-list-active":"" %>" href="/appointment-list">
+                  <div class="h-5 w-5 flex items-center justify-center"><i class="fa-solid fa-book"></i></div>
+                  <span>Appointment List</span>
+                </a>
+
+                <a class="menu-list <%= nav==="appointment_transaction"?"menu-list-active":"" %>" href="/appointment-transaction-list">
+                  <div class="h-5 w-5 flex items-center justify-center"><i class="fa-solid fa-book"></i></div>
+                  <span>Appointment Tran.</span>
+                </a>
+                
+                <a class="menu-list <%= nav==="contact_us"?"menu-list-active":"" %>" href="/contact-us">
+                  <div class="h-5 w-5 flex items-center justify-center"><i class="fa-solid fa-book"></i></div>
+                  <span>Contact Us</span>
+                </a>
+
+              </div>
+
+          </div>
+
+          <!-- Logout Menu Section -->
+          <div class="flex items-center xl:px-5 xl:py-3 gap-16 xl:gap-0">
+
+              <a class="text-tColor hover:text-red-500 stroke-tColor hover:stroke-red-500 hover:bg-transparent flex gap-3 items-center font-medium text-sm px-5 py-3 rounded-l-full" href="/logout">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M15.75 9V5.25C15.75 4.65326 15.5129 4.08097 15.091 3.65901C14.669 3.23705 14.0967 3 13.5 3H7.5C6.90326 3 6.33097 3.23705 5.90901 3.65901C5.48705 4.08097 5.25 4.65326 5.25 5.25V18.75C5.25 19.3467 5.48705 19.919 5.90901 20.341C6.33097 20.7629 6.90326 21 7.5 21H13.5C14.0967 21 14.669 20.7629 15.091 20.341C15.5129 19.919 15.75 19.3467 15.75 18.75V15M18.75 15L21.75 12M21.75 12L18.75 9M21.75 12H9" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                       
+                  <span class="hidden md:block">Log Out</span>
+              </a>
+              
+              <button class="block xl:hidden" id="toggle-button">
+                  <svg class="-mr-[1px]" height="24px" width="24px" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+                    </svg>
+              </button>    
+
+          </div>
+              
+       
+
+      </nav>
+      
+  </div>
+
+
+
+
+    <!-- Right Side Section -->
+    <div class="ml-auto w-full xl:w-5/6 px-0 xl:px-5 py-2 mt-16 xl:mt-0 h-screen">
+
+
+       <!-- Project Overview Header -->
+
+        <section class="flex flex-col xl:flex-row xl:items-center justify-between px-5 py-2 xl:py-5 gap-4">
+
+          <div class="">
+            <p class="font-bold"><%= title %></span></p>
+            <!-- <p class="text-tColor text-xs">1 October  2023 | 05:59 AM GMT</p> -->
+          </div>
+
+            <!-- Notification & User -->
+            <div class="text-xs xl:text-base flex items-center gap-5 xl:gap-8 ml-auto fixed xl:static top-[15px] right-12 z-10 scale-75 xl:scale-100">
+
+                
+              <!-- <a class="" href="#">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20.9766 12.5883V17.255C20.9766 17.5583 20.9649 17.85 20.9299 18.13C20.6616 21.28 18.8066 22.8433 15.3883 22.8433H14.9216C14.6299 22.8433 14.3499 22.9833 14.1749 23.2167L12.7749 25.0833C12.1566 25.9117 11.1533 25.9117 10.5349 25.0833L9.1349 23.2167C8.98324 23.0183 8.64492 22.8433 8.38825 22.8433H7.9216C4.19993 22.8433 2.33325 21.9217 2.33325 17.255V12.5883C2.33325 9.17001 3.90826 7.31501 7.0466 7.04668C7.3266 7.01168 7.61826 7 7.9216 7H15.3883C19.1099 7 20.9766 8.86668 20.9766 12.5883Z" stroke="#7C7C7C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M25.6433 7.9216V12.5883C25.6433 16.0183 24.0683 17.8616 20.93 18.1299C20.965 17.8499 20.9766 17.5583 20.9766 17.2549V12.5883C20.9766 8.8666 19.11 6.99992 15.3883 6.99992H7.92163C7.6183 6.99992 7.32663 7.0116 7.04663 7.0466C7.31496 3.90826 9.16996 2.33325 12.5883 2.33325H20.055C23.7766 2.33325 25.6433 4.19993 25.6433 7.9216Z" stroke="#7C7C7C" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M15.7448 15.4583H15.7553" stroke="#7C7C7C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M11.6613 15.4583H11.6718" stroke="#7C7C7C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M7.57808 15.4583H7.58858" stroke="#7C7C7C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  
+              </a>
+
+              <a class="" href="#">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14 7.51343V11.3984" stroke="black" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"/>
+                  <path d="M14.0232 2.33325C9.72988 2.33325 6.25321 5.80992 6.25321 10.1033V12.5533C6.25321 13.3466 5.92655 14.5366 5.51821 15.2133L4.03655 17.6866C3.12655 19.2149 3.75655 20.9183 5.43655 21.4783C11.0132 23.3333 17.0449 23.3333 22.6215 21.4783C24.1965 20.9533 24.8732 19.1099 24.0215 17.6866L22.5399 15.2133C22.1315 14.5366 21.8049 13.3349 21.8049 12.5533V10.1033C21.7932 5.83325 18.2932 2.33325 14.0232 2.33325Z" stroke="black" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"/>
+                  <path d="M17.885 21.9568C17.885 24.0918 16.135 25.8418 14 25.8418C12.9383 25.8418 11.9583 25.3985 11.2583 24.6985C10.5583 23.9985 10.115 23.0185 10.115 21.9568" stroke="black" stroke-width="1.5" stroke-miterlimit="10"/>
+                  </svg>
+                  
+              </a> -->
+
+
+
+          </div>
+            
+        </section>

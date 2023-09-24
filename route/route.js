@@ -1,4 +1,5 @@
 const apiRoute=require('./api/apiRoute')
+const adminRoute=require('./admin/adminRoute')
 
 const routes = [
     {
@@ -7,9 +8,7 @@ const routes = [
     },
     {
         path: '/',
-        handler: (req,res)=>{
-            return res.json({msg:'Welcome to the application'})
-        }
+        handler: adminRoute
     },
    
 ]
@@ -17,7 +16,7 @@ const routes = [
 module.exports = (app) => {
     routes.forEach(r => {
         if (r.path == '/') {
-            app.get(r.path, r.handler)
+            app.use(r.path, r.handler)
         } else {
             app.use(r.path, r.handler)
         }

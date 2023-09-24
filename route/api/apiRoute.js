@@ -11,7 +11,14 @@ const {getDivisionDistrictUpzila}=require('../../controller/api/locationControll
 const {customerRegistration,customerLogin,getCustomerProfile,updateCustomerProfile}=require('../../controller/api/customerController')
 
 // surveyor controller 
-const {surveyorRegistration,surveyorLogin,getSurveyorByServiceIdAndDate,getAllSurveyors,getSurveyorById,createSurveyorTransaction}=require('../../controller/api/surveyorController')
+const {surveyorRegistration,
+        surveyorLogin,
+        getSurveyorByServiceIdAndDate,
+        getAllSurveyors,getSurveyorById,
+        createSurveyorTransaction,
+        surveyorApprovalChange,
+        surveyorTransactionVerificationChange
+        }=require('../../controller/api/surveyorController')
 
 // our services
 const {getOurServices}=require('../../controller/api/ourServiceController')
@@ -20,8 +27,10 @@ const {getOurServices}=require('../../controller/api/ourServiceController')
 const {createSurveyorExperience}=require('../../controller/api/surveyorExperienceController')
 
 // appointment
-const {getAppointmentStatus,createAppointment,createTransaction}=require('../../controller/api/appointmentController')
+const {getAppointmentStatus,createAppointment,createTransaction,verifyTransaction}=require('../../controller/api/appointmentController')
 
+// contact us 
+const {insertContactUs}=require('../../controller/api/contactUsController')
 
 
 
@@ -61,6 +70,10 @@ router.get('/surveyors',getAllSurveyors)
 router.get('/surveyor',getSurveyorById)
 // for surveyor transaction
 router.post('/surveyor/transaction-create',createSurveyorTransaction)
+// for surveyor approval change 
+router.post('/surveyor/change-approval',surveyorApprovalChange)
+// for surveyor transaction verification change 
+router.post('/surveyor/transaction-verification-change',surveyorTransactionVerificationChange)
 
 // ----------------------------------------------------------surveyor--------------------------------------------------------------
 
@@ -89,9 +102,20 @@ router.get('/appointment-status',getAppointmentStatus)
 // for surveyor experience create 
 router.post('/appointment/create',createAppointment)
 // for insert transaction
-router.post('/transaction/create',createTransaction)
+router.post('/appointment/transaction/create',createTransaction)
+// for verifing transaction
+router.post('/appointment/transaction-verify',verifyTransaction)
 
 // ----------------------------------------------------------appointment--------------------------------------------------------------
+
+
+
+// ----------------------------------------------------------contact us--------------------------------------------------------------
+// insert contact us 
+router.post('/contact-us/create',insertContactUs)
+
+
+// ----------------------------------------------------------contact us--------------------------------------------------------------
 
 
 

@@ -123,4 +123,53 @@ exports.createTransaction=async(req,res,next)=>{
     }
 }
 
+// change appointment status by verifing the transaction 
+exports.verifyTransaction=async(req,res,next)=>{
+    try{
+        let id=req.query.transaction_id
+        let {is_verified}=req.body
+        db.beginTransaction(async(err)=>{
+            if(err){
+                return res.status(503).json({status:false,message:'Internal Server Error',transaction:{}})
+            }
+            try{
+                
+                
+
+                // update transaction
+                const update_transaction_query=`UPDATE transaction SET is_verified=? WHERE id=?`
+                const values=[is_verified,id]
+                await queryAsync(update_transaction_query,values)
+                const get_transaction_query=`SELECT * FROM transaction WHERE id =?`
+                const transaction_data=await queryAsync(get_transaction_query,[id])
+                console.log(transaction_data[0])
+                const appointment_id=transaction_data[0].appointment_id
+               // update appointment
+
+                const update_appointment_query=`UPDATE appointment SET appointment_status= ? WHERE appointment_id=?`
+                
+                const appointment_values=[is_verified==1?3:2,appointment_id]
+                const update_appointment=await queryAsync(update_appointment_query,appointment_values)
+                
+                db.commit((err)=>{
+                    if(err){
+                        db.rollback(()=>{
+                            return res.status(500).json({status:false,message:'Failed to insert transaction',transaction:{}})
+                        })
+                    }
+                    
+                    return res.status(200).json({status:true,message:'',transaction:transaction_data[0]})
+                })
+            }catch(e){
+                console.log(e)
+                db.rollback();
+                return res.status(503).json({ status: false, message: 'Internal Server Error', transaction: {} });
+            }
+
+        })
+    }catch(e){
+        console.log(e)
+        return res.status(503).json({status:false,message:'Internal Server Error',transaction:{}})
+    }
+}
 

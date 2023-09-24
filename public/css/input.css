@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components{
+    .menu-btn{
+        @apply bg-white hover:bg-gray-100 text-tColor font-medium px-6 py-2 rounded-3xl;
+    }
+
+    .menu-icons{
+        @apply rounded-[50%] hover:bg-gray-100 px-4 py-3;
+    }
+
+    .slider-arrow{
+        @apply border-2 border-gray-300 rounded-[50%] py-[12px] px-[13px];
+    }
+
+    .primary-btn{
+        @apply text-tColor2 border-2 border-primaryColor px-3 py-2 rounded-md;
+    }
+
+    .secondary-btn{
+        @apply bg-primaryColor text-black font-bold  px-5 py-2 rounded;
+    }
+
+    .tertiary-btn{
+        @apply border-[1px] border-primaryColor duration-75 gradient-text font-semibold px-5 py-1 rounded-3xl;
+    }
+
+    .profile-table th{
+        @apply text-left text-xs text-tColor font-semibold border-b p-3;
+    }
+
+    .profile-table td{
+        @apply text-left border-b-2 p-3;
+    }
+
+    .profile-table tbody tr:last-child td{
+        @apply border-b-0;
+    }
+
+
+    .order-details th{
+        @apply text-start font-semibold text-tColor border-b-2 pb-3;
+    }
+
+    .order-details td{
+        @apply font-semibold border-b-2 py-3;
+    }
+
+    .menu-list{
+        @apply flex gap-3 items-center text-sm text-tColor font-semibold my-1 px-5 py-2 rounded-lg;
+    }
+
+    .menu-list:hover,
+    .menu-list-active
+    {
+        @apply text-tColor2 bg-primaryColor;
+    }
+
+    .gradient-color{
+        @apply bg-gradient-to-b from-primaryColor to-primaryColorShade
+    }
+
+    .gradient-text{
+        @apply text-transparent font-bold bg-clip-text gradient-color
+    }
+
+    .menu-collapse>li:hover
+    {
+        @apply text-primaryColor font-semibold;
+    }
+
+    .menu-collapse{
+        @apply text-sm grid gap-2 min-w-[155px] pl-10 pt-2 list-disc rounded-xl;
+    }
+    
+
+}

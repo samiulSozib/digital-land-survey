@@ -1,0 +1,104 @@
+.custom-container{
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 1.2rem;
+    }
+
+
+    .accordion-button[aria-expanded="true"] .fa-chevron-down {
+      transform: rotate(180deg);
+    }
+
+    .product a{
+      opacity: 0;
+      transition: 0.1s;
+      -webkit-transition: 0.1s;
+      -moz-transition: 0.1s;
+      -ms-transition: 0.1s;
+      -o-transition: 0.1s;
+      bottom: -10%;
+}
+
+    .product:hover a{
+      opacity: 1;
+      bottom:10%;
+    }
+
+    @media (min-width: 768px) {
+    .main-menu ul li {
+      position: relative;
+    }
+    
+    .main-menu .sub-menu {
+      position: absolute;
+      width: 100%;
+      background: #fff;
+      left: 0;
+      padding: 12px 0;
+      border-radius: 5px;
+      box-shadow: 0 0 3px 3px #f6f6f6;
+      visibility: hidden;
+      opacity: 0;
+      z-index: 99999;
+    }
+    
+    
+    .main-menu > ul > li:hover .sub-menu {
+      visibility: visible;
+      opacity: 1;
+    }
+    
+  }
+
+  .main-menu .sub-menu li a {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    display: inline-block;
+  }
+
+  .sub-menu{
+    margin-top: 7px;
+  }
+
+
+  /* Progress Bar */
+
+  progress[value] {
+    --color: #20C9AC;
+    /*theprogresscolor*/--background: #20c9ad17;
+    /*thebackgroundcolor*/-webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    width: 100px;
+    height: 8px;
+    margin: 0 10px;
+    border-radius: 10em;
+    background: var(--background);
+    -webkit-border-radius: 10em;
+    -moz-border-radius: 10em;
+    -ms-border-radius: 10em;
+    -o-border-radius: 10em;
+}
+
+  @media only screen and (min-width: 1600px) {
+    progress[value] {
+      width: 200px;
+    }
+  }
+
+  progress[value]::-webkit-progress-bar {
+    border-radius: 10em;
+    background: var(--background);
+  }
+  progress[value]::-webkit-progress-value {
+    border-radius: 10em;
+    background: var(--color);
+  }
+  progress[value]::-moz-progress-bar {
+    border-radius: 10em;
+    background: var(--color);
+  }
+  

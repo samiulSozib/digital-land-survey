@@ -1,0 +1,252 @@
+<%- include('../partials/navigation.ejs') %>
+
+        <section class="bg-gray-100 px-5 py-5">
+
+          <div class="grid grid-cols-2 xl:grid-cols-4 gap-10">
+
+            <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-36 ">
+              <p class="text-4xl xl:text-5xl">653</p>
+              <p class="text-tColor mt-2">Total Leads</p>
+            </div>
+
+            <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-36 ">
+              <p class="text-5xl">201</p>
+              <p class="text-tColor mt-2">Total Applications</p>
+            </div>
+
+            <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-36 ">
+              <p class="text-5xl">34</p>
+              <p class="text-tColor mt-2">Number of Services</p>
+            </div>
+
+            <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-36 ">
+              <p class="text-5xl">3,024</p>
+              <p class="text-tColor mt-2">Overall Invoices</p>
+            </div>
+
+          </div>
+
+          <div class="bg-white rounded-xl border-2 border-gray-200 p-5 mt-5">
+
+            <div class="my-5 flex justify-between items-center">
+              <p class="font-bold">Recent Invoice</p>
+
+              <div class=" flex items-center gap-2">
+                <div class="relative">
+                  <select class=" bg-primaryColor block appearance-none w-full  py-3 px-4 pr-8 rounded-xl leading-tight focus:outline-none shadow">
+                    <option hidden>Filter</option>
+                    <option>Filter 1</option>
+                    <option>Filter 2</option>
+                    <option>Filter 3</option>
+                    <option>Filter 4</option>
+                  </select>
+                  <div class="pointer-events-none absolute inset-y-0 right-1 flex items-center px-2">
+                    <i class="fa-solid fa-angle-down"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-col justify-around">
+  
+              <div class=" overflow-x-scroll md:overflow-hidden">
+                <table class="table-auto text-xs md:text-sm profile-table w-[300%] md:w-full shadow">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Order Id</th>
+                      <th>Landwoner</th>
+                      <th>Supervisor</th>
+                      <th>City</th>
+                      <th>Order Date</th>
+                      <th>Status</th>
+                      <th>Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+  
+                    <tr>
+                      <td>1.</td>
+                      <td>#6545</td>
+                      <td>Demo Name</td>
+                      <td>Demo Name</td>
+                      <td>Rajshahi</td>
+                      <td>01 Oct | 11:29 am</td>
+                      <td class="flex items-center gap-1"><div class="h-2 w-2 rounded-full bg-green-500"></div><span>Paid</span></td>
+                      <td>$84</td>
+                    </tr>
+
+                    <tr>
+                      <td>1.</td>
+                      <td>#6545</td>
+                      <td>Demo Name</td>
+                      <td>Demo Name</td>
+                      <td>Rajshahi</td>
+                      <td>01 Oct | 11:29 am</td>
+                      <td class="flex items-center gap-1"><div class="h-2 w-2 rounded-full bg-green-500"></div><span>Paid</span></td>
+                      <td>$84</td>
+                    </tr>
+
+                    <tr>
+                      <td>1.</td>
+                      <td>#6545</td>
+                      <td>Demo Name</td>
+                      <td>Demo Name</td>
+                      <td>Rajshahi</td>
+                      <td>01 Oct | 11:29 am</td>
+                      <td class="flex items-center gap-1"><div class="h-2 w-2 rounded-full bg-red-500"></div><span>Unaid</span></td>
+                      <td>$84</td>
+                    </tr>
+
+                    <tr>
+                      <td>1.</td>
+                      <td>#6545</td>
+                      <td>Demo Name</td>
+                      <td>Demo Name</td>
+                      <td>Rajshahi</td>
+                      <td>01 Oct | 11:29 am</td>
+                      <td class="flex items-center gap-1"><div class="h-2 w-2 rounded-full bg-yellow-500"></div><span>Pending</span></td>
+                      <td>$84</td>
+                    </tr>
+
+                    <tr>
+                      <td>1.</td>
+                      <td>#6545</td>
+                      <td>Demo Name</td>
+                      <td>Demo Name</td>
+                      <td>Rajshahi</td>
+                      <td>01 Oct | 11:29 am</td>
+                      <td class="flex items-center gap-1"><div class="h-2 w-2 rounded-full bg-green-500"></div><span>Paid</span></td>
+                      <td>$84</td>
+                    </tr>
+  
+
+                  </tbody>
+                </table>
+  
+              </div>
+  
+                <!-- Page Select -->
+                <div class="flex flex-col xl:flex-row justify-between xl:items-center py-5 gap-2">
+                  <div class="flex items-center justify-center gap-2">
+                  <p class="text-center text-xs xl:text-sm text-tColor2">Showing 1 to 10 of 30 entries</p>
+                  </div>
+  
+                  <div class="scale-75 xl:scale-100 grid grid-flow-col content-center ml-auto mr-auto xl:mr-0 font-semibold xl:text-sm text-tColor gap-2">
+                      <a class="bg-gray-200 h-8 w-8 rounded flex items-center justify-center shadow"  href="#"><svg width="6" height="10" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M7.125 0.75L0.875 7L7.125 13.25" stroke="#84818A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                          </a>
+                      <a class="bg-primaryColor text-white h-8 w-8 rounded flex items-center justify-center shadow"  href="#">1</a>
+                      <a class="bg-gray-200 h-8 w-8 rounded flex items-center justify-center shadow"  href="#">2</a>
+                      <a class="bg-gray-200 h-8 w-8 rounded flex items-center justify-center shadow" href="#">3</a>
+                      <a class="bg-gray-200 h-8 w-8 rounded flex items-center justify-center shadow"  href="#">4</a>
+                      <a class="bg-gray-200 h-8 w-8 rounded flex items-center justify-center shadow"  href="#">5</a>
+                      <a class="bg-gray-200 h-8 w-8 rounded flex items-center justify-center shadow"  href="#">...</a>
+                      <a class="bg-gray-200 h-8 w-8 rounded flex items-center justify-center shadow"  href="#">12</a>
+                      <a class="bg-gray-200 h-8 w-8 rounded flex items-center justify-center shadow"  href="#"><svg width="6" height="10" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M0.875 0.75L7.125 7L0.875 13.25" stroke="#84818A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                          </a>
+                  </div>
+                </div>
+  
+            </div>
+  
+  
+          </div>
+
+        </section>
+    
+
+    </div>
+
+</section>
+
+
+
+
+
+<!-- Header Section Script -->
+<script> 
+  // Menu toggle button 
+    const toggleButton = document.getElementById("toggle-button");
+    const toggleMenu = document.getElementById("toggle-menu");
+    var toggleCounter = 1;
+    toggleButton.onclick = function () {
+      toggleCounter++;
+      if(toggleCounter%2 == 0){
+        toggleMenu.classList.remove("hidden");
+        toggleMenu.classList.add("grid");
+      }
+      else{
+        toggleMenu.classList.remove("grid");
+        toggleMenu.classList.add("hidden");
+      }
+    }
+
+
+  </script>
+
+
+<!-- Accordion Script -->
+<script>
+  const accordionButtons = document.querySelectorAll('.accordion-button');
+  const accordionMenu = document.querySelectorAll('.menu-collapse');
+
+  accordionButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const accordionCollapse = button.nextElementSibling;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      accordionCollapse.classList.toggle('hidden');
+    });
+  });
+
+  // Set all accordion items to collapsed state by default
+  document.querySelectorAll('.menu-collapse').forEach(collapse => {
+    collapse.classList.add('hidden');
+  });
+
+
+</script>
+
+
+<!-- Table Script -->
+<script>
+  const tableButtons = document.querySelectorAll('.table-button');
+  const tableMenu = document.querySelectorAll('.table-collapse');
+  const tableClose = document.querySelectorAll('.table-close');
+
+  tableButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const tableCollapse = button.nextElementSibling;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      tableCollapse.classList.toggle('hidden');
+    });
+  });
+
+  tableClose.forEach(button => {
+    button.addEventListener('click', () => {
+      const tableCollapse = button.parentElement.parentElement.parentElement;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      tableCollapse.classList.toggle('hidden');
+    });
+  });
+
+</script>
+
+<script>
+  const tables = document.querySelectorAll('.table-collapse');
+  window.onclick = function (event) {
+  for (let table of tables){
+  if (event.target == table) {
+    table.classList.toggle('hidden');
+  }
+}
+};
+</script>
+
+
+
+</body>
+</html>

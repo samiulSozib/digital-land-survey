@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <!-- Link to Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100">
+    <div class="min-h-screen flex items-center justify-center">
+        <div class="bg-white p-8 shadow-lg rounded-lg w-80">
+            <h2 class="text-2xl font-bold mb-4">Login</h2>
+            <form action="/login" method="POST">
+                <div class="mb-4">
+                    <label for="username" class="block text-gray-600 text-sm font-medium mb-2">Username</label>
+                    <input type="text" id="username" name="username"
+                        class="border rounded-lg px-3 py-2 w-full focus:outline-none focus:ring focus:border-blue-300"
+                        required>
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="block text-gray-600 text-sm font-medium mb-2">Password</label>
+                    <input type="password" id="password" name="password"
+                        class="border rounded-lg px-3 py-2 w-full focus:outline-none focus:ring focus:border-blue-300"
+                        required>
+                </div>
+                <div class="flex items-center justify-between mb-4">
+                    <a href="#" class="text-blue-600 text-sm font-medium hover:underline">Forgot password?</a>
+                </div>
+                <button type="submit"
+                    class="w-full bg-blue-600 text-white rounded-lg px-4 py-2 font-medium hover:bg-blue-700 focus:outline-none focus:ring">Login</button>
+            </form>
+            <!-- <p class="text-gray-600 text-sm mt-4">Don't have an account? <a href="#"
+                    class="text-blue-600 font-medium hover:underline">Sign up</a></p> -->
+        </div>
+    </div>
+</body>
+
+</html>

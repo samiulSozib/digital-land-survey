@@ -22,7 +22,7 @@ app.use(express.static('public'));
 
 app.use(
   session({
-    secret: 'admin_login_secret',
+    secret: 'dls_admin_login_secret',
     resave: true,
     saveUninitialized: true,
   })

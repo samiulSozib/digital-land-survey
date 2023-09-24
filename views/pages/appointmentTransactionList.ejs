@@ -1,0 +1,275 @@
+<%- include('../partials/navigation.ejs') %>
+
+        <section class="bg-gray-100 px-5 py-5">
+
+         
+
+          <div class="bg-white rounded-xl border-2 border-gray-200 px-5">
+
+
+            <div class="my-5 flex justify-between items-center">
+
+              <div class="flex items-center gap-5">
+                <div class="bg-white shadow relative rounded-md w-full xl:w-fit">
+                  <input class="py-2 pl-3 pr-10 focus:outline-none w-full xl:w-fit xl:max-w-[250px]" type="text" placeholder="Search">
+                  <i class="fa-solid fa-magnifying-glass absolute top-1/2 right-3 -translate-y-1/2 text-tColor"></i>
+                </div>
+
+              </div>
+
+              <div class=" flex items-center gap-2">
+                <div class="relative">
+                  <select class=" bg-white block appearance-none w-full text-tColor py-3 px-4 pr-8 rounded-md leading-tight focus:outline-none shadow">
+                    <option hidden>Filter by area range</option>
+                    <option class="text-black">Filter 1</option>
+                    <option class="text-black">Filter 2</option>
+                    <option class="text-black">Filter 3</option>
+                    <option class="text-black">Filter 4</option>
+                  </select>
+                  <div class="pointer-events-none absolute inset-y-0 right-1 flex items-center px-2 text-tColor">
+                    <i class="fa-solid fa-angle-down"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-col justify-around">
+  
+              <div class=" overflow-x-scroll md:overflow-hidden">
+                <table class="table-auto text-xs md:text-sm profile-table w-[300%] md:w-full shadow">
+                  <thead>
+                    <tr>
+                      <th style="width: 5%;">S.</th>
+                      <th style="width: 10%;">APPOINTMENT</th>
+                      <th style="width: 10%;">APP. STATUS</th>
+                      <th style="width: 15%;">ACCOUNT NUMBER</th>
+                      <th style="width: 15%;">ACCOUNT TYPE</th>
+                      <th style="width: 10%;">AMOUNT</th>
+                      <th style="width: 15%;">TR ID</th>
+                      <th style="width: 5%;">VERIFIED</th>
+                      <!-- <th style="width: 10%;">ACTION</th> -->
+                      <th style="width: 15%;"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% let serialNumber = 1; %>
+                    <% for(let transaction of transactions){ %>
+                    <tr>
+                      <td><strong><%= serialNumber %></strong></td>
+                      <td><%= transaction.appointment_id %></td>
+                      <td><%= transaction.status_name %></td>
+                      <td><%= transaction.account_number %></td>
+                      <td class="text-tColor"><%= transaction.account_type %></td>
+                      <td class="text-tColor"><%= transaction.amount %></td>
+                      <td class="text-tColor"><%= transaction.transaction_id %></td>
+                      <span class="approval-icon">
+                      <% if(transaction.is_verified) {%>
+                        <td><button class="verification-change" data-transaction-id="<%= transaction.id %>" data-is-verified="<%= transaction.is_verified %>"><i style="color: green;" class="fa-solid fa-unlock"></i></button></td>
+                    <% }else{ %>
+                        <td><button class="verification-change" data-transaction-id="<%= transaction.id %>" data-is-verified="<%= transaction.is_verified %>"><i style="color: red;" class="fa-solid fa-lock"></i></button></td>
+                        <% } %>
+                      </span>
+                      <td><div class="text-tColor flex items-center gap-3 text-lg">
+                        <!-- <button><i class="fa-regular fa-pen-to-square"></i></button> -->
+                        
+                        <button><i style="color: darkred;" class="fa-regular fa-trash-can"></i></button>
+                      </div></td>
+                      <!-- <td><a href="landwonerDetails.html" class="primary-btn w-fit">View Details</a></td> -->
+                    </tr>
+                    <% serialNumber++; %>
+                    <% } %>
+                  </tbody>
+                </table>
+  
+              </div>
+  
+                <!-- Page Select -->
+                <div class="flex flex-col xl:flex-row justify-between xl:items-center py-5 gap-2">
+                  <div class="flex items-center justify-center gap-2">
+                    <div class="flex text-tColor items-center justify-center gap-2">
+                      <p class="text-center text-xs xl:text-sm">Showing</p>
+                      <div class="relative max-w-[100px]">
+                        <select class="block appearance-none bg-white text-xs xl:text-sm py-1 px-2 pr-8 rounded leading-tight focus:outline-none shadow">
+                          <option>10</option>
+                          <option>20</option>
+                          <option>30</option>
+                          <option>40</option>
+                          <option>50</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-1 flex items-center px-2 text-gray-700">
+                          <i class="fa-solid fa-angle-down text-tColor text-xs xl:text-sm"></i>
+                        </div>
+                      </div> 
+                      <p class="text-center text-xs xl:text-sm">of <span>50</span></p>
+                      </div>
+                  </div>
+  
+                  <div class="scale-75 xl:scale-100 grid grid-flow-col content-center ml-auto mr-auto xl:mr-0 font-semibold xl:text-sm text-tColor gap-2">
+                      <a class="bg-gray-200 h-8 w-8 rounded flex items-center justify-center shadow"  href="#"><svg width="6" height="10" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M7.125 0.75L0.875 7L7.125 13.25" stroke="#84818A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                          </a>
+                      <a class="bg-primaryColor text-white h-8 w-8 rounded flex items-center justify-center shadow"  href="#">1</a>
+                      <a class="bg-gray-200 h-8 w-8 rounded flex items-center justify-center shadow"  href="#">2</a>
+                      <a class="bg-gray-200 h-8 w-8 rounded flex items-center justify-center shadow" href="#">3</a>
+                      <a class="bg-gray-200 h-8 w-8 rounded flex items-center justify-center shadow"  href="#">4</a>
+                      <a class="bg-gray-200 h-8 w-8 rounded flex items-center justify-center shadow"  href="#">5</a>
+                      <a class="bg-gray-200 h-8 w-8 rounded flex items-center justify-center shadow"  href="#">...</a>
+                      <a class="bg-gray-200 h-8 w-8 rounded flex items-center justify-center shadow"  href="#">12</a>
+                      <a class="bg-gray-200 h-8 w-8 rounded flex items-center justify-center shadow"  href="#"><svg width="6" height="10" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M0.875 0.75L7.125 7L0.875 13.25" stroke="#84818A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                          </a>
+                  </div>
+                </div>
+  
+            </div>
+  
+  
+          </div>
+
+        </section>
+    
+
+    </div>
+
+</section>
+
+
+
+
+
+<!-- Header Section Script -->
+<script> 
+  // Menu toggle button 
+    const toggleButton = document.getElementById("toggle-button");
+    const toggleMenu = document.getElementById("toggle-menu");
+    var toggleCounter = 1;
+    toggleButton.onclick = function () {
+      toggleCounter++;
+      if(toggleCounter%2 == 0){
+        toggleMenu.classList.remove("hidden");
+        toggleMenu.classList.add("grid");
+      }
+      else{
+        toggleMenu.classList.remove("grid");
+        toggleMenu.classList.add("hidden");
+      }
+    }
+
+
+  </script>
+
+
+<!-- Accordion Script -->
+<script>
+  const accordionButtons = document.querySelectorAll('.accordion-button');
+  const accordionMenu = document.querySelectorAll('.menu-collapse');
+
+  accordionButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const accordionCollapse = button.nextElementSibling;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      accordionCollapse.classList.toggle('hidden');
+    });
+  });
+
+  // Set all accordion items to collapsed state by default
+  document.querySelectorAll('.menu-collapse').forEach(collapse => {
+    collapse.classList.add('hidden');
+  });
+
+
+</script>
+
+
+<!-- Table Script -->
+<script>
+  const tableButtons = document.querySelectorAll('.table-button');
+  const tableMenu = document.querySelectorAll('.table-collapse');
+  const tableClose = document.querySelectorAll('.table-close');
+
+  tableButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const tableCollapse = button.nextElementSibling;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      tableCollapse.classList.toggle('hidden');
+    });
+  });
+
+  tableClose.forEach(button => {
+    button.addEventListener('click', () => {
+      const tableCollapse = button.parentElement.parentElement.parentElement;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      tableCollapse.classList.toggle('hidden');
+    });
+  });
+
+</script>
+
+<script>
+  const tables = document.querySelectorAll('.table-collapse');
+  window.onclick = function (event) {
+  for (let table of tables){
+  if (event.target == table) {
+    table.classList.toggle('hidden');
+  }
+}
+};
+</script>
+
+<!-- script for verification change -->
+<script>
+  const verification_change_buttin = document.querySelectorAll('.verification-change');
+
+verification_change_buttin.forEach((button) => {
+  button.addEventListener("click", async function (event) {
+    const transaction_id = this.getAttribute("data-transaction-id");
+    const current_verified_status = this.getAttribute("data-is-verified");
+    //console.log(transaction_id + " " + current_verified_status);
+    const confirmed = confirm('Do you want to change verification status?');
+
+    if (!confirmed) {
+      return;
+    }
+
+    const apiUrl = `/api/appointment/transaction-verify?transaction_id=${transaction_id}`;
+
+    const dataToSend = {
+      is_verified: current_verified_status == 0 ? 1 : 0,
+    };
+    try {
+      const response = await axios.post(apiUrl, dataToSend);
+
+      console.log(response);
+
+      if (response.status !== 200) {
+        alert("API request failed");
+      } else {
+        // Get the approval icon element
+        const approvalIcon = button.querySelector('.fa-solid');
+        // Update the icon based on the new approval status
+        if (current_verified_status == 0) {
+          approvalIcon.style.color = 'green';
+          approvalIcon.className = 'fa-solid fa-unlock';
+        } else {
+          approvalIcon.style.color = 'red';
+          approvalIcon.className = 'fa-solid fa-lock';
+        }
+
+        alert("Successfully changed verification status");
+        this.setAttribute("data-is-verified", current_verified_status == 0 ? 1 : 0);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Verification change failed");
+    }
+  });
+});
+
+</script>
+
+<!-- script for verification change -->
+
+</body>
+</html>
