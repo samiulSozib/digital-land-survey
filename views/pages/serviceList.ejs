@@ -17,7 +17,7 @@
 
               </div>
 
-              <a href="addServices.html" class="primary-btn">Add Services +</a>
+              <a href="/service-add" class="primary-btn">Add Services +</a>
             </div>
 
             <div class="flex flex-col justify-around">
@@ -46,8 +46,8 @@
                       <td><%= service.service_charge %></td>
                       <td><%= service.description %></td>
                       <td><div class="text-tColor flex items-center gap-3 text-lg">
-                        <a href="editServices.html"><i class="fa-regular fa-pen-to-square"></i></a>
-                        <button><i style="color: darkred;" class="fa-regular fa-trash-can"></i></button>
+                        <a href="/service-edit/<%= service.service_id %>"><i class="fa-regular fa-pen-to-square"></i></a>
+                        <button class="delete-service" data-service-id="<%= service.service_id %>"><i style="color: darkred;" class="fa-regular fa-trash-can"></i></button>
                       </div></td>
                     </tr>
                     <% serialNumber++; %>

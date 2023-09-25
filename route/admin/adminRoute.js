@@ -11,7 +11,7 @@ const {getDashboard}=require('../../controller/admin/dashboardController')
 
 
 // Customer controller
-const {getCustomerList}=require('../../controller/admin/customerController')
+const {getCustomerList,getEditCustomer,postEditCustomer}=require('../../controller/admin/customerController')
 
 
 // surveyor controller
@@ -48,8 +48,13 @@ router.get('/',adminAuth,getDashboard)
 
 
 // -------------------------------------------------Customer-------------------------------------------------------
+// for get edit customer page 
+router.get('/customer-edit/:customer_id',adminAuth,getEditCustomer)
 // for get customer List
 router.get('/customer-list',adminAuth,getCustomerList)
+// for post edit customer
+router.post('/customer-edit/:customer_id',adminAuth,upload.single("customer-profile-image"),postEditCustomer)
+
 // -------------------------------------------------Customer-------------------------------------------------------
 
 

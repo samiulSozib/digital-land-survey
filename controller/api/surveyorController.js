@@ -594,3 +594,49 @@ exports.surveyorTransactionVerificationChange=async(req,res,next)=>{
         return res.status(503).json({status:false,message:'Internal Server Error',transaction:{}})
     }
 }
+
+// delete surveyor
+exports.deleteSurveyor = async (req, res, next) => {
+    try {
+        const id = req.query.surveyor_id;
+
+        db.beginTransaction(async (err) => {
+            if (err) {
+                return res.status(503).json({ status: false, message: 'Internal Server Error', surveyor: {} });
+            }
+
+            try {
+                const get_surveyor_query = 'SELECT * FROM surveyors WHERE surveyor_id = ?';
+                const existing_surveyor = await queryAsync(get_surveyor_query, [id]);
+
+                if (existing_surveyor.length === 0) {
+                    return res.status(200).json({ status: false, message: 'No surveyor found', surveyor: {} });
+                }
+
+                
+
+                const delete_surveyor_query = `DELETE FROM surveyors WHERE surveyor_id = ?`;
+                
+                await queryAsync(delete_surveyor_query, [id]);
+
+                
+                db.commit((err) => {
+                    if (err) {
+                        db.rollback(() => {
+                            return res.status(500).json({ status: false, message: 'Failed to delete surveyor ', surveyor: {} });
+                        });
+                    }
+
+                    return res.status(200).json({ status: true, message: '', surveyor: existing_surveyor[0] });
+                });
+            } catch (e) {
+                console.log(e);
+                db.rollback();
+                return res.status(503).json({ status: false, message: 'Internal Server Error', surveyor: {} });
+            }
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(503).json({ status: false, message: 'Internal Server Error', surveyor: {} });
+    }
+};

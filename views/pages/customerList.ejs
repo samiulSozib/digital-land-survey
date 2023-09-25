@@ -61,8 +61,8 @@
                       <td><%= customer.customer_mobile_number %></td>
                       <td class="text-tColor"><p><%= customer.customer_address %>,<%= customer.upzila_name %>,<%= customer.district_name %>,<%= customer.division_name %></p></td>
                       <td><div class="text-tColor flex items-center gap-3 text-lg">
-                        <button><i class="fa-regular fa-pen-to-square"></i></button>
-                        <button><i style="color: darkred;" class="fa-regular fa-trash-can"></i></button>
+                        <a href="/customer-edit/<%= customer.customer_id %>"><i class="fa-regular fa-pen-to-square"></i></a>
+                        <button data-customer-id="<%= customer.customer_id %>" class="delete-customer"><i style="color: darkred;" class="fa-regular fa-trash-can"></i></button>
                       </div></td>
                       <td><a href="/customer-details/<%= customer.customer_id %>" class="primary-btn w-fit">View Details</a></td>
                     </tr>
@@ -208,6 +208,44 @@
 };
 </script>
 
+<!-- delete customer -->
+<script>
+  const delete_button = document.querySelectorAll('.delete-customer');
+
+  delete_button.forEach((button) => {
+    button.addEventListener("click", async function (event) {
+      const customer_id = this.getAttribute("data-customer-id");
+     
+      const confirmed = confirm('Do you want to delete this customer?');
+
+      if (!confirmed) {
+        return;
+      }
+
+      const apiUrl = `/api/customer-delete?customer_id=${customer_id}`;
+
+      
+      try {
+        const response = await axios.delete(apiUrl);
+
+        console.log(response);
+
+        if (response.status !== 200) {
+          alert("API request failed");
+        } else {
+          const row = this.parentElement.parentElement.parentElement;
+          row.remove();
+          alert("Customer delete success");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Customer delete fail");
+      }
+    });
+  });
+
+</script>
+<!-- delete customer -->
 
 
 </body>

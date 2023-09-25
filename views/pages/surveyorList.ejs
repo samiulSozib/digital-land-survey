@@ -75,7 +75,7 @@
                               </button>
                             <% } %>
                           </span>
-                          <button data-surveyor-id="<%= surveyor.surveyor_id %>"><i style="color: darkred;" class="fa-regular fa-trash-can"></i></button>
+                          <button class="delete-surveyor" data-surveyor-id="<%= surveyor.surveyor_id %>"><i style="color: darkred;" class="fa-regular fa-trash-can"></i></button>
                         </div>
                       </td>
 
@@ -276,6 +276,47 @@ approval_change_button.forEach((button) => {
 </script>
 
 <!-- script for surveyor approval change -->
+
+
+
+<!-- delete surveyor -->
+<script>
+  const delete_button = document.querySelectorAll('.delete-surveyor');
+
+  delete_button.forEach((button) => {
+    button.addEventListener("click", async function (event) {
+      const surveyor_id = this.getAttribute("data-surveyor-id");
+     
+      const confirmed = confirm('Do you want to delete this surveyor?');
+
+      if (!confirmed) {
+        return;
+      }
+
+      const apiUrl = `/api/surveyor-delete?surveyor_id=${surveyor_id}`;
+
+      
+      try {
+        const response = await axios.delete(apiUrl);
+
+        console.log(response);
+
+        if (response.status !== 200) {
+          alert("API request failed");
+        } else {
+          const row = this.parentElement.parentElement.parentElement;
+          row.remove();
+          alert("Surveyor delete success");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Surveyor delete fail");
+      }
+    });
+  });
+
+</script>
+<!-- delete surveyor -->
 
 
 </body>

@@ -8,7 +8,12 @@ const upload=require('../../middleware/upload')
 const {getDivisionDistrictUpzila}=require('../../controller/api/locationController')
 
 // customer controller 
-const {customerRegistration,customerLogin,getCustomerProfile,updateCustomerProfile}=require('../../controller/api/customerController')
+const {customerRegistration,
+        customerLogin,
+        getCustomerProfile,
+        updateCustomerProfile,
+        deleteCustomer
+        }=require('../../controller/api/customerController')
 
 // surveyor controller 
 const {surveyorRegistration,
@@ -17,7 +22,8 @@ const {surveyorRegistration,
         getAllSurveyors,getSurveyorById,
         createSurveyorTransaction,
         surveyorApprovalChange,
-        surveyorTransactionVerificationChange
+        surveyorTransactionVerificationChange,
+        deleteSurveyor
         }=require('../../controller/api/surveyorController')
 
 // our services
@@ -52,6 +58,8 @@ router.post('/customer/auth/login',customerLogin)
 router.get('/customer/profile',getCustomerProfile)
 // for customer profile update 
 router.post('/customer/profile/update',upload.single('customer-profile-image'),updateCustomerProfile)
+// for delete customer
+router.delete('/customer-delete',deleteCustomer)
 
 // ----------------------------------------------------------customer--------------------------------------------------------------
 
@@ -74,6 +82,8 @@ router.post('/surveyor/transaction-create',createSurveyorTransaction)
 router.post('/surveyor/change-approval',surveyorApprovalChange)
 // for surveyor transaction verification change 
 router.post('/surveyor/transaction-verification-change',surveyorTransactionVerificationChange)
+// for surveyor delete
+router.delete('/surveyor-delete',deleteSurveyor)
 
 // ----------------------------------------------------------surveyor--------------------------------------------------------------
 

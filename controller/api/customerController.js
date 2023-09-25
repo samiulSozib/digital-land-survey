@@ -271,7 +271,7 @@ exports.updateCustomerProfile = async (req, res, next) => {
                     return res.status(200).json({ status: false, message: 'No customer found', customer: {} });
                 }
 
-                let image=existing_customer[0].image
+                let image=existing_customer[0].customer_image
                 if(req.file){
                     image=`${base_url}/uploads/${req.file.filename}`
                 }
@@ -327,6 +327,53 @@ exports.updateCustomerProfile = async (req, res, next) => {
                     }
 
                     return res.status(200).json({ status: true, message: '', customer: nestedJsonData.data });
+                });
+            } catch (e) {
+                console.log(e);
+                db.rollback();
+                return res.status(503).json({ status: false, message: 'Internal Server Error', customer: {} });
+            }
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(503).json({ status: false, message: 'Internal Server Error', customer: {} });
+    }
+};
+
+
+// delete customer
+exports.deleteCustomer = async (req, res, next) => {
+    try {
+        const id = req.query.customer_id;
+
+        db.beginTransaction(async (err) => {
+            if (err) {
+                return res.status(503).json({ status: false, message: 'Internal Server Error', customer: {} });
+            }
+
+            try {
+                const get_customer_query = 'SELECT * FROM customers WHERE customer_id = ?';
+                const existing_customer = await queryAsync(get_customer_query, [id]);
+
+                if (existing_customer.length === 0) {
+                    return res.status(200).json({ status: false, message: 'No customer found', customer: {} });
+                }
+
+                
+
+                const delete_customer_query = `DELETE FROM customers WHERE customer_id = ?`;
+                
+                await queryAsync(delete_customer_query, [id]);
+
+                
+                db.commit((err) => {
+                    if (err) {
+                        db.rollback(() => {
+                            return res.status(500).json({ status: false, message: 'Failed to delete customer', customer: {} });
+                        });
+                    }
+
+                    return res.status(200).json({ status: true, message: '', customer: existing_customer[0] });
                 });
             } catch (e) {
                 console.log(e);
