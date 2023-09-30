@@ -264,6 +264,92 @@ exports.getSurveyorByServiceIdAndDate = async (req, res, next) => {
     }
 };
 
+
+// get surveyor by services id and date and surveyor id
+exports.getSurveyorByServiceIdAndDateAndSurveyorId = async (req, res, next) => {
+    try {
+        let {date,service_id,surveyor_id}=req.query
+        db.beginTransaction(async (err) => {
+            if (err) {
+                return res.status(503).json({ status: false, message: 'Internal Server Error', surveyor: {} });
+            }
+
+            try {
+                const get_surveyors_query = `SELECT surveyors.*,
+                d.*,
+                di.*,
+                u.*
+                FROM surveyors
+                INNER JOIN divisions as d ON surveyors.surveyor_division=d.division_id
+                INNER JOIN districts as di ON surveyors.surveyor_district=di.district_id
+                INNER JOIN upzilas as u ON surveyors.surveyor_upzila=u.upzila_id
+                INNER JOIN surveyor_transaction ON surveyors.surveyor_id=surveyor_transaction.surveyor_id
+                JOIN surveyor_experiences ON surveyors.surveyor_id=surveyor_experiences.surveyor_id
+                WHERE surveyors.surveyor_id NOT IN (
+                    SELECT appointment.surveyor_id
+                    FROM appointment
+                    WHERE appointment.appointment_date = ?
+                )
+                AND surveyors.surveyor_id=? AND surveyors.surveyor_is_approved=1 AND surveyor_transaction.is_verified=1 AND surveyor_experiences.service_id=?`;
+                const values=[date,surveyor_id,service_id]
+                const surveyors = await queryAsync(get_surveyors_query,values);
+                if (surveyors.length === 0) {
+                    return res.status(200).json({ status: true, message: 'Surveyor not found', surveyor: {} });
+                }
+
+                const nestedJsonData={
+                    data:surveyors.map((surveyor=>({
+                        surveyor_id:surveyor.surveyor_id,
+                        surveyor_name:surveyor.surveyor_name,
+                        surveyor_image:surveyor.surveyor_image,
+                        surveyor_mobile_number:surveyor.surveyor_mobile_number,
+                        surveyor_password:surveyor.surveyor_password,
+                        surveyor_address:surveyor.surveyor_address,
+                        surveyor_is_approved:surveyor.surveyor_is_approved,
+                        surveyor_createdAt:surveyor.surveyor_createdAt,
+                        surveyor_updatedAt:surveyor.surveyor_updatedAt,
+                        division:{
+                            division_id:surveyor.division_id,
+                            division_name:surveyor.division_name,
+                            division_createdAt:surveyor.division_createdAt,
+                            division_updatedAt:surveyor.division_updatedAt,
+                            district:{
+                                district_id:surveyor.district_id,
+                                district_name:surveyor.district_name,
+                                district_createdAt:surveyor.district_createdAt,
+                                district_updatedAt:surveyor.district_updatedAt,
+                                upzila:{
+                                    upzila_id:surveyor.upzila_id,
+                                    upzila_name:surveyor.upzila_name,
+                                    upzila_createdAt:surveyor.upzila_createdAt,
+                                    upzila_updatedAt:surveyor.upzila_updatedAt
+                                }
+                            },
+                        },
+                    })))
+                }
+                db.commit((err) => {
+                    if (err) {
+                        db.rollback(() => {
+                            return res.status(500).json({ status: false, message: 'Failed to find Surveyor', surveyor: {} });
+                        });
+                    }
+
+                    return res.status(200).json({ status: true, message: '', surveyor: nestedJsonData.data[0] });
+                });
+            } catch (e) {
+                console.log(e);
+                db.rollback();
+                return res.status(503).json({ status: false, message: 'Internal Server Error', surveyor: {} });
+            }
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(503).json({ status: false, message: 'Internal Server Error', surveyor: {} });
+    }
+};
+
+
 // get all surveyors 
 exports.getAllSurveyors = async (req, res, next) => {
     try {
@@ -628,6 +714,61 @@ exports.deleteSurveyor = async (req, res, next) => {
                     }
 
                     return res.status(200).json({ status: true, message: '', surveyor: existing_surveyor[0] });
+                });
+            } catch (e) {
+                console.log(e);
+                db.rollback();
+                return res.status(503).json({ status: false, message: 'Internal Server Error', surveyor: {} });
+            }
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(503).json({ status: false, message: 'Internal Server Error', surveyor: {} });
+    }
+};
+
+// change password
+exports.changeSurveyorPassword = async (req, res, next) => {
+    try {
+        const surveyor_id = req.query.surveyor_id;
+        const { newPassword } = req.body;
+
+        db.beginTransaction(async (err) => {
+            if (err) {
+                return res.status(503).json({ status: false, message: 'Internal Server Error', surveyor: {} });
+            }
+
+            try {
+                const get_surveyor_query = `SELECT * FROM surveyors WHERE surveyor_id=?`;
+                const existing_surveyor = await queryAsync(get_surveyor_query, [surveyor_id]);
+
+                if (existing_surveyor.length === 0) {
+                    return res.status(200).json({ status: true, message: 'No surveyor found', surveyor: {} });
+                }
+
+                const hashedNewPassword = await bcrypt.hash(newPassword,10)
+                const update_surveyor_query = 'UPDATE surveyors SET surveyor_password = ? WHERE surveyor_id = ?';
+                const updateValues = [hashedNewPassword, surveyor_id];
+                await queryAsync(update_surveyor_query, updateValues);
+
+                const find_surveyor_by_id=`SELECT c.*,
+                                                    d.*,
+                                                    di.*,
+                                                    u.*
+                                                    FROM surveyors as c
+                                                    INNER JOIN divisions as d ON c.surveyor_division=d.division_id
+                                                    INNER JOIN districts as di ON c.surveyor_district=di.district_id
+                                                    INNER JOIN upzilas as u ON c.surveyor_upzila=u.upzila_id WHERE c.surveyor_id = ?`;
+                const surveyor=await queryAsync(find_surveyor_by_id,[surveyor_id])
+
+                db.commit((err) => {
+                    if (err) {
+                        db.rollback(() => {
+                            return res.status(500).json({ status: false, message: 'Failed to change surveyor password', surveyor: {} });
+                        });
+                    }
+
+                    return res.status(200).json({ status: true, message: '', surveyor: surveyor[0] });
                 });
             } catch (e) {
                 console.log(e);

@@ -39,7 +39,7 @@ exports.getAppointmentStatus = async (req, res, next) => {
 // create appointment 
 exports.createAppointment=async(req,res,next)=>{
     try{
-        let {surveyor_id,service_id,customer_id,appointment_date,name,mobile_number,district,upzila,mouja,JL_number,land_amount,RS_dag,BS_dag}=req.body
+        let {surveyor_id,service_id,customer_id,appointment_date,name,mobile_number,district,upzila,mouja,JL_number,land_amount,RS_dag,BS_dag,account_number,account_type,amount,transaction_id,address}=req.body
         db.beginTransaction(async(err)=>{
             if(err){
                 return res.status(503).json({status:false,message:'Internal Server Error',appointment:{}})
@@ -50,8 +50,19 @@ exports.createAppointment=async(req,res,next)=>{
                 const values=[surveyor_id,service_id,customer_id,appointment_date,name,mobile_number,district,upzila,mouja,JL_number,land_amount,RS_dag,BS_dag,1]
                 const created_appointment=await queryAsync(insert_appointment_query,values)
                 const appointment_id=created_appointment.insertId
+                
+                // for transaction create
+                const insert_transaction_query='INSERT INTO transaction (appointment_id,account_number,account_type,amount,transaction_id,address,is_verified) VALUES (?,?,?,?,?,?,?)'
+                const t_values=[appointment_id,account_number,account_type,amount,transaction_id,address,0]
+                const created_transaction=await queryAsync(insert_transaction_query,t_values)
+
+                const update_appointment_query=`UPDATE appointment SET appointment_status= ? WHERE appointment_id=?`
+                const appointment_values=[2,appointment_id]
+                const update_appointment=await queryAsync(update_appointment_query,appointment_values)
+
                 const get_created_appointment='SELECT * FROM appointment WHERE appointment_id=?'
                 const appointment_data=await queryAsync(get_created_appointment,[appointment_id])
+
                 
                 db.commit((err)=>{
                     if(err){

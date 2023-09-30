@@ -42,7 +42,7 @@
                       <td><%= contact.mobile_number %></td>
                       <td><%= contact.message %></td>
                       <td><div class="text-tColor flex items-center gap-3 text-lg">
-                        <button><i style="color: darkred;" class="fa-regular fa-trash-can"></i></button>
+                        <button class="delete-contact-us" data-contact-us-id="<%= contact.contact_us_id %>"><i style="color: darkred;" class="fa-regular fa-trash-can"></i></button>
                       </div></td>
                     </tr>
                     <% serialNumber++; %>
@@ -188,6 +188,47 @@
 }
 };
 </script>
+
+
+
+<!-- delete contact us -->
+<script>
+  const delete_button = document.querySelectorAll('.delete-contact-us');
+
+  delete_button.forEach((button) => {
+    button.addEventListener("click", async function (event) {
+      const contact_us_id = this.getAttribute("data-contact-us-id");
+     
+      const confirmed = confirm('Do you want to delete this contact message?');
+
+      if (!confirmed) {
+        return;
+      }
+
+      const apiUrl = `/api/contact-us-delete?contact_us_id=${contact_us_id}`;
+
+      
+      try {
+        const response = await axios.delete(apiUrl);
+
+        console.log(response);
+
+        if (response.status !== 200) {
+          alert("API request failed");
+        } else {
+          const row = this.parentElement.parentElement.parentElement;
+          row.remove();
+          alert("Contact Message delete success");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Contact Message delete fail");
+      }
+    });
+  });
+
+</script>
+<!-- delete contact us -->
 
 
 

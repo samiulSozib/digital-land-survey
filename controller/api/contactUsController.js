@@ -38,3 +38,42 @@ exports.insertContactUs=async(req,res,next)=>{
         return res.status(503).json({status:false,message:'Internal Server Error',contact:{}})
     }
 }
+
+// delete contact us 
+exports.deleteContactUs=async(req,res,next)=>{
+    try{
+        let contact_us_id=req.query.contact_us_id
+        db.beginTransaction(async(err)=>{
+            if(err){
+                console.log(e)
+                return res.status(503).json({status:false, message:'Internal Server Error', contact:{}})
+            }
+            try{
+                const get_contact_us_query=`SELECT * FROM contact_us WHERE contact_us_id=?`
+                const contact_us_data=await queryAsync(get_contact_us_query,[contact_us_id])
+                if(contact_us_data.length===0){
+                    return res.status(200).json({status:true,message:'Failed to find contact us data',contact:{}})
+                }
+                
+                const delete_contact_us_query=`DELETE FROM contact_us WHERE contact_us_id =?`
+                await queryAsync(delete_contact_us_query,[contact_us_id])
+                db.commit((err)=>{
+                    if(err){
+                        db.rollback(()=>{
+                            return res.status(500).json({status:false,message:'Failed to insert contact us data',contact:{}})
+                        })
+                    }
+                    
+                    return res.status(200).json({status:true,message:'',contact:contact_us_data[0]})
+                })
+            }catch(e){
+                console.log(e)
+                db.rollback();
+                return res.status(503).json({ status: false, message: 'Internal Server Error', contact: {} });
+            }
+        })
+    }catch(e){
+        console.log(e)
+        return res.status(503).json({status:false,message:'Internal Server Error',contact:{}})
+    }
+}

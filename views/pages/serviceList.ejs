@@ -195,6 +195,45 @@
 </script>
 
 
+<!-- delete service -->
+<script>
+  const delete_button = document.querySelectorAll('.delete-service');
+
+  delete_button.forEach((button) => {
+    button.addEventListener("click", async function (event) {
+      const service_id = this.getAttribute("data-service-id");
+     
+      const confirmed = confirm('Do you want to delete this service?');
+
+      if (!confirmed) {
+        return;
+      }
+
+      const apiUrl = `/api/service-delete?service_id=${service_id}`;
+
+      
+      try {
+        const response = await axios.delete(apiUrl);
+
+        console.log(response);
+
+        if (response.status !== 200) {
+          alert("API request failed");
+        } else {
+          const row = this.parentElement.parentElement.parentElement;
+          row.remove();
+          alert("Service delete success");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Service delete fail");
+      }
+    });
+  });
+
+</script>
+<!-- delete service -->
+
 
 </body>
 </html>

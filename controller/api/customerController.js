@@ -17,11 +17,11 @@ exports.customerRegistration=async(req,res,next)=>{
                 const is_customer_present=await queryAsync(get_customer_query,[mobile_number])
                 if(is_customer_present.length>0){
                     db.rollback()
-                    return res.status(200).json({status:false,message:'The mobile number is used, please try another number.',celebrity:{}})
+                    return res.status(200).json({status:false,message:'The mobile number is used, please try another number.',customer:{}})
                 }
                 if(password!==confirm_password){
                     db.rollback()
-                    return res.status(200).json({status:false,message:'Wrong password. The password you entered does not match.',celebrity:{}})
+                    return res.status(200).json({status:false,message:'Wrong password. The password you entered does not match.',customer:{}})
                 }
                 password=await bcrypt.hash(password,10)
                 let customer_image=null
@@ -374,6 +374,61 @@ exports.deleteCustomer = async (req, res, next) => {
                     }
 
                     return res.status(200).json({ status: true, message: '', customer: existing_customer[0] });
+                });
+            } catch (e) {
+                console.log(e);
+                db.rollback();
+                return res.status(503).json({ status: false, message: 'Internal Server Error', customer: {} });
+            }
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(503).json({ status: false, message: 'Internal Server Error', customer: {} });
+    }
+};
+
+// change password
+exports.changeCustomerPassword = async (req, res, next) => {
+    try {
+        const customer_id = req.query.customer_id;
+        const { newPassword } = req.body;
+
+        db.beginTransaction(async (err) => {
+            if (err) {
+                return res.status(503).json({ status: false, message: 'Internal Server Error', customer: {} });
+            }
+
+            try {
+                const get_customer_query = `SELECT * FROM customers WHERE customer_id=?`;
+                const existing_customer = await queryAsync(get_customer_query, [customer_id]);
+
+                if (existing_customer.length === 0) {
+                    return res.status(200).json({ status: true, message: 'No customer found', customer: {} });
+                }
+
+                const hashedNewPassword = await bcrypt.hash(newPassword,10)
+                const update_customer_query = 'UPDATE customers SET customer_password = ? WHERE customer_id = ?';
+                const updateValues = [hashedNewPassword, customer_id];
+                await queryAsync(update_customer_query, updateValues);
+
+                const find_customer_by_id=`SELECT c.*,
+                                                    d.*,
+                                                    di.*,
+                                                    u.*
+                                                    FROM customers as c
+                                                    INNER JOIN divisions as d ON c.customer_division=d.division_id
+                                                    INNER JOIN districts as di ON c.customer_district=di.district_id
+                                                    INNER JOIN upzilas as u ON c.customer_upzila=u.upzila_id WHERE c.customer_id = ?`;
+                const customer=await queryAsync(find_customer_by_id,[customer_id])
+
+                db.commit((err) => {
+                    if (err) {
+                        db.rollback(() => {
+                            return res.status(500).json({ status: false, message: 'Failed to change customer password', customer: {} });
+                        });
+                    }
+
+                    return res.status(200).json({ status: true, message: "", customer: customer[0] });
                 });
             } catch (e) {
                 console.log(e);

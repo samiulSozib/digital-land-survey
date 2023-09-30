@@ -219,3 +219,64 @@ exports.postEditCustomer=async(req,res,next)=>{
         return res.redirect('/')
     }
 }
+
+// customer view details
+exports.getCustomerDetails=async(req,res,next)=>{
+    try{
+        let customer_id=req.params.customer_id
+        db.beginTransaction(async(err)=>{
+            if(err){
+                return res.redirect('/')
+            }
+            try{
+                const get_customer_query = `SELECT c.*,
+                                        d.*,
+                                        di.*,
+                                        u.*
+                                        FROM customers as c
+                                        INNER JOIN divisions as d ON c.customer_division=d.division_id
+                                        INNER JOIN districts as di ON c.customer_district=di.district_id
+                                        INNER JOIN upzilas as u ON c.customer_upzila=u.upzila_id
+                                        WHERE c.customer_id=?
+                                        `; 
+                const customer_info = await queryAsync(get_customer_query,[customer_id]);
+                // 
+
+                const get_customer_appointment_query = `SELECT a.*,
+                                        a_s.*,
+                                        s.*,
+                                        os.*
+                                        FROM appointment as a
+                                        INNER JOIN surveyors as s ON s.surveyor_id=a.surveyor_id
+                                        INNER JOIN appointment_status as a_s ON a_s.appointment_status_id=a.appointment_status
+                                        INNER JOIN our_services as os ON os.service_id=a.service_id
+                                        
+                                        WHERE a.customer_id=?
+                                        `; 
+                const customer_appointment_info = await queryAsync(get_customer_appointment_query,[customer_id]);
+
+          
+                db.commit((err)=>{
+                    if(err){
+                        db.rollback(()=>{
+                            //req.flash('fail', 'Star Insert Fail')
+                            return res.redirect('/')
+                        })
+                    }
+                    //req.flash('success', 'Star Insert Success')
+                    //return res.json(customer_appointment_info)
+                    return res.render('pages/customerDetails',{title:"Customer Details",customer:customer_info[0],customer_appointment_info,nav:"customers"})
+                })
+            }catch(e){
+                db.rollback();
+                console.log(e)
+                //req.flash('fail', 'Star Insert Fail')
+                return res.redirect('/')
+            }
+        })
+    }catch(e){
+        console.log(e)
+        //req.flash('fail', 'star Insert Fail')
+        return res.redirect('/')
+    }
+}

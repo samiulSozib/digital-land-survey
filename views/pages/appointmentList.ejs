@@ -2,9 +2,6 @@
 
 
         <section class="bg-gray-100 px-5 py-5">
-
-         
-
           <div class="bg-white rounded-xl border-2 border-gray-200 p-5 mt-5">
 
             <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-3">
@@ -47,13 +44,12 @@
                   <thead>
                     <tr>
                       <th>S.</th>
-                      <th>A. ID</th>
                       <th>SURVEYOR</th>
                       <th>LAND OWNER</th>
                       <th>DATE</th>
                       <th>SERVICE</th>
                       <th>STATUS</th>
-                      <th></th>
+                      <th>DETAILS</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -61,10 +57,10 @@
                     <% for(let appointment of appointments){ %>
                     <tr>
                       <td><strong><%= serialNumber %></strong></td>
-                      <td><a href="/surveyor-profile/<%= appointment.surveyor_id %>"><%= appointment.surveyor_name %></a></td>
-                      <td><a href="/customer-profile/<%= appointment.surveyor_id %>"><%= appointment.customer_name %></a></td>
+                      <td><a href="/surveyor-details/<%= appointment.surveyor_id %>"><%= appointment.surveyor_name %></a></td>
+                      <td><a href="/customer-details/<%= appointment.surveyor_id %>"><%= appointment.customer_name %></a></td>
                       <td><%= appointment.appointment_date %></td>
-                      <td><span class="bg-green-100 text-green-600 p-1 rounded-md text-xs"><a href="/service-details/<%= appointment.service_id %>"><%= appointment.service_name %></a></span></td>
+                      <td><span class="bg-green-100 text-green-600 p-1 rounded-md text-xs"><a href="/service-edit/<%= appointment.service_id %>"><%= appointment.service_name %></a></span></td>
                       <td><p class="bg-yellow-100 text-yellow-400 w-fit font-bold p-2 rounded"><%= appointment.status_name %></p></td>
                       <td><a href="/appointment-details/<%= appointment.appointment_id %>"><i class="fa-solid fa-caret-down border-2 p-2 rounded-[50%] text-tColor border-tColor px-[8px] py-[5px]"></i></a></td>
                     </tr>

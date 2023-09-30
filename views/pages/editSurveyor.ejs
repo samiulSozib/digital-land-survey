@@ -1,0 +1,218 @@
+<%- include('../partials/navigation.ejs') %>
+
+
+
+        <section class="bg-gray-100 px-5 py-5">
+
+          <form action="/surveyor-edit/<%= surveyor.surveyor_id %>" method="POST" enctype="multipart/form-data">
+
+            <div>
+              <p class="font-semibold text-tColor2 mb-2">Surveyor Image</p>
+              
+              <div class="h-32 aspect-square">
+                <% if(surveyor.surveyor_image){ %>
+                    <img src="<%= surveyor.surveyor_image %>" alt="surveyor image">
+                    <% }else{ %>
+                <img src="" alt="">
+                <% } %>
+              </div>
+              <input style="margin-top: 5px;" type="file" name="surveyor-profile-image" class="surveyor-profile-image custom-surveyor-profile-image-label">
+              <!-- <button class="primary-btn mt-4">Change Image</button> -->
+            </div>
+
+            <div>
+              <p class="mt-5 mb-2 text-tColor2 font-semibold">Surveyor Name</p>
+              <input class="bg-white w-full max-w-[500px] border-[1px] border-primaryColor first-line:appearance-none  rounded-md py-3 px-5 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" id="surveyor_name" name="surveyor_name" type="text" placeholder="Please enter surveyor name" value="<%= surveyor.surveyor_name %>" />
+            </div>
+
+            <div>
+                <p class="mt-5 mb-2 text-tColor2 font-semibold">Surveyor Mobile Number</p>
+                <input class="bg-white w-full max-w-[500px] border-[1px] border-primaryColor first-line:appearance-none  rounded-md py-3 px-5 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" id="surveyor_mobile_number" name="surveyor_mobile_number" type="text" placeholder="Please enter surveyor mobile number" value="<%= surveyor.surveyor_mobile_number %>"/>
+            </div>
+
+            <div>
+                <p class="mt-5 mb-2 text-tColor2 font-semibold">Surveyor Address</p>
+                <input class="bg-white w-full max-w-[500px] border-[1px] border-primaryColor first-line:appearance-none  rounded-md py-3 px-5 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" id="surveyor_address" name="surveyor_address" type="text" placeholder="Please enter surveyor address" value="<%= surveyor.surveyor_address %>"/>
+              </div>
+
+              <div>
+                <p class="mt-5 mb-2 text-tColor2 font-semibold">Division</p>
+                <select id="divisionDropdown" name="surveyor_division" class="bg-white w-full max-w-[500px] border-[1px] border-primaryColor first-line:appearance-none rounded-md py-3 px-5 text-gray-800 leading-tight focus:outline-none focus:shadow-outline">
+                    <option style="color: grey;" value="<%= surveyor.division_id %>"><%= surveyor.division_name %></option>
+                    <% for (let division of locations) { %>
+                    <option value="<%= division.division_id %>"><%= division.division_name %></option>
+                  <% } %>
+                </select>
+              </div>
+          
+              <div>
+                <p class="mt-5 mb-2 text-tColor2 font-semibold">District</p>
+                <select id="districtDropdown" name="surveyor_district" class="bg-white w-full max-w-[500px] border-[1px] border-primaryColor first-line:appearance-none rounded-md py-3 px-5 text-gray-800 leading-tight focus:outline-none focus:shadow-outline">
+                  <!-- Options will be populated dynamically based on the selected division -->
+                  <option value="<%= surveyor.district_id %>"><%= surveyor.district_name %></option>
+                </select>
+              </div>
+          
+              <div>
+                <p class="mt-5 mb-2 text-tColor2 font-semibold">Upzila</p>
+                <select id="upzilaDropdown" name="surveyor_upzila" class="bg-white w-full max-w-[500px] border-[1px] border-primaryColor first-line:appearance-none rounded-md py-3 px-5 text-gray-800 leading-tight focus:outline-none focus:shadow-outline">
+                  <!-- Options will be populated dynamically based on the selected district -->
+                  <option value="<%= surveyor.upzila_id %>"><%= surveyor.upzila_name %></option>
+                </select>
+              </div>
+
+
+          
+            <div class="mt-5 font-semibold">
+              <button type="submit" class="secondary-btn">Update</button>
+            </div>
+
+          </form>
+
+        </section>
+    
+
+    </div>
+
+</section>
+
+
+
+
+
+<!-- Header Section Script -->
+<script> 
+  // Menu toggle button 
+    const toggleButton = document.getElementById("toggle-button");
+    const toggleMenu = document.getElementById("toggle-menu");
+    var toggleCounter = 1;
+    toggleButton.onclick = function () {
+      toggleCounter++;
+      if(toggleCounter%2 == 0){
+        toggleMenu.classList.remove("hidden");
+        toggleMenu.classList.add("grid");
+      }
+      else{
+        toggleMenu.classList.remove("grid");
+        toggleMenu.classList.add("hidden");
+      }
+    }
+
+
+  </script>
+
+
+<!-- Accordion Script -->
+<script>
+  const accordionButtons = document.querySelectorAll('.accordion-button');
+  const accordionMenu = document.querySelectorAll('.menu-collapse');
+
+  accordionButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const accordionCollapse = button.nextElementSibling;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      accordionCollapse.classList.toggle('hidden');
+    });
+  });
+
+  // Set all accordion items to collapsed state by default
+  document.querySelectorAll('.menu-collapse').forEach(collapse => {
+    collapse.classList.add('hidden');
+  });
+
+
+</script>
+
+
+<!-- Table Script -->
+<script>
+  const tableButtons = document.querySelectorAll('.table-button');
+  const tableMenu = document.querySelectorAll('.table-collapse');
+  const tableClose = document.querySelectorAll('.table-close');
+
+  tableButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const tableCollapse = button.nextElementSibling;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      tableCollapse.classList.toggle('hidden');
+    });
+  });
+
+  tableClose.forEach(button => {
+    button.addEventListener('click', () => {
+      const tableCollapse = button.parentElement.parentElement.parentElement;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      tableCollapse.classList.toggle('hidden');
+    });
+  });
+
+</script>
+
+<script>
+  const tables = document.querySelectorAll('.table-collapse');
+  window.onclick = function (event) {
+  for (let table of tables){
+  if (event.target == table) {
+    table.classList.toggle('hidden');
+  }
+}
+};
+</script>
+
+
+<script>
+
+    const locationsData = JSON.parse('<%- JSON.stringify(locations) %>');
+
+  
+    // Get references to the dropdowns
+    const divisionDropdown = document.getElementById("divisionDropdown");
+    const districtDropdown = document.getElementById("districtDropdown");
+    const upzilaDropdown = document.getElementById("upzilaDropdown");
+  
+    // Event listener for the Division dropdown
+    divisionDropdown.addEventListener("change", () => {
+      const selectedDivisionId = divisionDropdown.value;
+      const selectedDivision = locationsData.find(division => division.division_id === parseInt(selectedDivisionId));
+      const districts = selectedDivision ? selectedDivision.districts : [];
+  
+      // Populate the District dropdown
+      districtDropdown.innerHTML = "<option value=''>Select a District</option>";
+      districts.forEach(district => {
+        districtDropdown.innerHTML += `<option value="${district.district_id}">${district.district_name}</option>`;
+      });
+      
+      // Clear the Upzila dropdown
+      upzilaDropdown.innerHTML = "<option value=''>Select an Upzila</option>";
+    });
+  
+    // Event listener for the District dropdown
+    districtDropdown.addEventListener("change", () => {
+      const selectedDistrictId = districtDropdown.value;
+      const selectedDivisionId = divisionDropdown.value;
+  
+      const selectedDivision = locationsData.find(division => division.division_id === parseInt(selectedDivisionId));
+      const selectedDistrict = selectedDivision ? selectedDivision.districts.find(district => district.district_id === parseInt(selectedDistrictId)) : null;
+      const upzilas = selectedDistrict ? selectedDistrict.upzilas : [];
+  
+      // Populate the Upzila dropdown
+      upzilaDropdown.innerHTML = "<option value=''>Select an Upzila</option>";
+      upzilas.forEach(upzila => {
+        upzilaDropdown.innerHTML += `<option value="${upzila.upzila_id}">${upzila.upzila_name}</option>`;
+      });
+    });
+  </script>
+
+
+<script>
+    $('.surveyor-profile-image').on('change', function(e) {
+      let filename = e.target.files[0].name
+      $(this).next('.custom-surveyor-profile-image-label').html(filename)
+  })
+  
+  
+  </script>
+
+
+</body>
+</html>

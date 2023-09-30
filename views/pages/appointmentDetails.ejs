@@ -1,0 +1,245 @@
+<%- include('../partials/navigation.ejs') %>
+
+
+        <section class="bg-gray-100 px-5 py-5">
+
+
+          <div class="grid grid-cols-1 md:grid-cols-6 mt-5 gap-10">
+
+            <div class="bg-white md:col-span-3 xl:col-span-4 rounded-lg">
+
+              <div class="flex justify-between items-center px-5 py-2 border-b-2">
+                <p class="font-bold">Appointment Status</p>
+                <p class="text-green-500 bg-green-100 rounded-lg p-2"><%= appointment.status_name %></p>
+              </div>
+              <div class="flex justify-between items-center px-5 py-2 border-b-2">
+                <p><%= appointment.service_name %></p>
+              </div>
+              
+              <div class="px-5 py-10 grid gap-2">
+                <p class="font-bold">Appointment Information</p>
+                <div>
+                    <table>
+                        <tr>
+                          <th>Item</th>
+                          <th>Desc.</th>
+                        </tr>
+                        <tr>
+                          <td>Name: </td>
+                          <td><%= appointment.name %></td>
+                        </tr>
+                        <tr>
+                            <td>Mobile Number: </td>
+                            <td><%= appointment.mobile_number %></td>
+                        </tr>
+                        <tr>
+                            <td>District: </td>
+                            <td><%= appointment.district_name %></td>
+                        </tr>
+                        <tr>
+                            <td>Upzila: </td>
+                            <td><%= appointment.upzila_name %></td>
+                        </tr>
+                        <tr>
+                            <td>Date: </td>
+                            <td><%= appointment.appointment_date %></td>
+                        </tr>
+                        <tr>
+                            <td>মৌজা : </td>
+                            <td><%= appointment.mouja %></td>
+                        </tr>
+                        <tr>
+                            <td>জে  এল নাম্বার : </td>
+                            <td><%= appointment.JL_number %></td>
+                        </tr>
+                        <tr>
+                            <td>জমির পরিমাণ : </td>
+                            <td><%= appointment.land_amount %></td>
+                        </tr>
+                        <tr>
+                            <td>আর এস  দাগ : </td>
+                            <td><%= appointment.RS_dag %></td>
+                        </tr>
+                        <tr>
+                            <td>বি এস দাগ : </td>
+                            <td><%= appointment.BS_dag %></td>
+                        </tr>
+                        
+   
+                      </table>
+                </div>
+                <p class="font-bold">Transaction Information</p>
+                <div>
+                    <table>
+                        <tr>
+                            <th>Item</th>
+                            <th>Desc.</th>
+                          </tr>
+                          <tr>
+                            <td>Account Number: </td>
+                            <td><%= appointment.account_number %></td>
+                          </tr>
+                          <tr>
+                            <td>Account Type: </td>
+                            <td><%= appointment.account_type %></td>
+                          </tr>
+                          <tr>
+                            <td>Amount: </td>
+                            <td><%= appointment.amount %></td>
+                          </tr>
+                          <tr>
+                            <td>Transaction ID: </td>
+                            <td><%= appointment.transaction_id %></td>
+                          </tr>
+                          <tr>
+                            <td>Address: </td>
+                            <td><%= appointment.address %></td>
+                          </tr>
+                          <tr>
+                            <td>Verified: </td>
+                            <% if(appointment.is_verified){ %>
+                                <td>YES</td>
+                                <% }else{ %>
+                                    <td>NO</td>
+                                <% } %>
+                          </tr>
+                    </table>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="bg-white md:col-span-3 xl:col-span-2 rounded-lg">
+
+              <div class="flex justify-between items-center px-5 py-4 border-b-2">
+                <p class="font-bold">Survey Man</p>
+              </div>
+
+              <div class="flex items-center gap-5 p-5 border-b-2">
+                <div class="h-20 aspect-square rounded-[50%]">
+                    <% if(appointment.surveyor_image){ %>
+                        <img src="<%= appointment.surveyor_image %>" alt="">
+                        <% } %>
+                </div>
+                <div>
+                  <p class="font-bold"><%= appointment.surveyor_name %></p>
+                  <p class="text-tColor text-sm"><%= appointment.surveyor_mobile_number %></p>
+                </div>
+              </div>
+              
+              <div class="flex justify-between items-center px-5 py-4 border-b-2">
+                <p class="font-bold">Landowner</p>
+              </div>
+
+              <div class="flex items-center gap-5 p-5 border-b-2">
+                <div class="h-20 aspect-square rounded-[50%]">
+                    <% if(appointment.customer_image){ %>
+                        <img src="<%= appointment.customer_image %>" alt="">
+                        <% } %>
+                </div>
+                <div>
+                  <p class="font-bold"><%= appointment.customer_name %></p>
+                  <p class="text-tColor text-sm"><%= appointment.customer_mobile_number %></p>
+                </div>
+              </div>
+
+          
+
+            </div>
+
+          </div>
+
+        </section>
+    
+
+    </div>
+
+</section>
+
+
+
+
+
+<!-- Header Section Script -->
+<script> 
+  // Menu toggle button 
+    const toggleButton = document.getElementById("toggle-button");
+    const toggleMenu = document.getElementById("toggle-menu");
+    var toggleCounter = 1;
+    toggleButton.onclick = function () {
+      toggleCounter++;
+      if(toggleCounter%2 == 0){
+        toggleMenu.classList.remove("hidden");
+        toggleMenu.classList.add("grid");
+      }
+      else{
+        toggleMenu.classList.remove("grid");
+        toggleMenu.classList.add("hidden");
+      }
+    }
+
+
+  </script>
+
+
+<!-- Accordion Script -->
+<script>
+  const accordionButtons = document.querySelectorAll('.accordion-button');
+  const accordionMenu = document.querySelectorAll('.menu-collapse');
+
+  accordionButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const accordionCollapse = button.nextElementSibling;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      accordionCollapse.classList.toggle('hidden');
+    });
+  });
+
+  // Set all accordion items to collapsed state by default
+  document.querySelectorAll('.menu-collapse').forEach(collapse => {
+    collapse.classList.add('hidden');
+  });
+
+
+</script>
+
+
+<!-- Table Script -->
+<script>
+  const tableButtons = document.querySelectorAll('.table-button');
+  const tableMenu = document.querySelectorAll('.table-collapse');
+  const tableClose = document.querySelectorAll('.table-close');
+
+  tableButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const tableCollapse = button.nextElementSibling;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      tableCollapse.classList.toggle('hidden');
+    });
+  });
+
+  tableClose.forEach(button => {
+    button.addEventListener('click', () => {
+      const tableCollapse = button.parentElement.parentElement.parentElement;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      tableCollapse.classList.toggle('hidden');
+    });
+  });
+
+</script>
+
+<script>
+  const tables = document.querySelectorAll('.table-collapse');
+  window.onclick = function (event) {
+  for (let table of tables){
+  if (event.target == table) {
+    table.classList.toggle('hidden');
+  }
+}
+};
+</script>
+
+
+
+</body>
+</html>

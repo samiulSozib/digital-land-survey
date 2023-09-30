@@ -10,6 +10,18 @@
     <link rel="stylesheet" href="/css/output.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+    <style>
+      table { 
+        border-collapse: collapse;
+      }
+      
+      td, th {
+        border: 1px solid #dddddd;
+        text-align: center;
+        padding: 8px;
+      }
+ 
+      </style>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
 <body class="font-sans">
@@ -72,6 +84,11 @@
                 <a class="menu-list <%= nav==="appointment_transaction"?"menu-list-active":"" %>" href="/appointment-transaction-list">
                   <div class="h-5 w-5 flex items-center justify-center"><i class="fa-solid fa-book"></i></div>
                   <span>Appointment Tran.</span>
+                </a>
+
+                <a class="menu-list <%= nav==="instruments"?"menu-list-active":"" %>" href="/instruments">
+                  <div class="h-5 w-5 flex items-center justify-center"><i class="fa-solid fa-book"></i></div>
+                  <span>Instruments</span>
                 </a>
                 
                 <a class="menu-list <%= nav==="contact_us"?"menu-list-active":"" %>" href="/contact-us">

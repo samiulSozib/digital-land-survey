@@ -2,8 +2,8 @@ const db=require('../../config/database')
 const {queryAsync, queryAsyncWithoutValue}=require('../../config/helper')
 const base_url = require('../../const/const')
 
-// get Services list
-exports.getServiceList=async(req,res,next)=>{
+// get instrumentss list
+exports.getInstruments=async(req,res,next)=>{
     try{
         
         db.beginTransaction(async(err)=>{
@@ -12,8 +12,8 @@ exports.getServiceList=async(req,res,next)=>{
             }
             try{
                 
-                const get_services_query=`SELECT * FROM our_services`;
-                const services=await queryAsyncWithoutValue(get_services_query)
+                const get_instruments_query=`SELECT * FROM instruments`;
+                const instruments=await queryAsyncWithoutValue(get_instruments_query)
           
                 db.commit((err)=>{
                     if(err){
@@ -23,7 +23,8 @@ exports.getServiceList=async(req,res,next)=>{
                         })
                     }
                     //req.flash('success', 'Star Insert Success')
-                    return res.render('pages/serviceList',{title:"Services",services,nav:"services"})
+                    //return res.json(instruments)
+                    return res.render('pages/instrument',{title:"Instruments",instruments,nav:"instruments"})
                 })
             }catch(e){
                 db.rollback();
@@ -39,47 +40,8 @@ exports.getServiceList=async(req,res,next)=>{
     }
 }
 
-// get edit services
-exports.getEditService=async(req,res,next)=>{
-    try{
-        let service_id=req.params.service_id
-        db.beginTransaction(async(err)=>{
-            if(err){
-                return res.redirect('/')
-            }
-            try{
-                const get_service_query = `SELECT * FROM our_services WHERE service_id=?`; 
-                const service=await queryAsync(get_service_query,[service_id])
-                
-
-          
-                db.commit((err)=>{
-                    if(err){
-                        db.rollback(()=>{
-                            //req.flash('fail', 'Star Insert Fail')
-                            return res.redirect('/')
-                        })
-                    }
-                    //req.flash('success', 'Star Insert Success')
-                    //return res.json(customer[0])
-                    return res.render('pages/editService',{title:"Edit Service",service:service[0],nav:"services"})
-                })
-            }catch(e){
-                db.rollback();
-                console.log(e)
-                //req.flash('fail', 'Star Insert Fail')
-                return res.redirect('/')
-            }
-        })
-    }catch(e){
-        console.log(e)
-        //req.flash('fail', 'star Insert Fail')
-        return res.redirect('/')
-    }
-}
-
-// get add services
-exports.getAddService=async(req,res,next)=>{
+// get add instrument
+exports.getAddInstrument=async(req,res,next)=>{
     try{
         
         db.beginTransaction(async(err)=>{
@@ -98,7 +60,7 @@ exports.getAddService=async(req,res,next)=>{
                     }
                     //req.flash('success', 'Star Insert Success')
                     //return res.json(customer[0])
-                    return res.render('pages/addService',{title:"Add Service",nav:"services"})
+                    return res.render('pages/addInstrument',{title:"Add Instrument",nav:"instruments"})
                 })
             }catch(e){
                 db.rollback();
@@ -114,10 +76,10 @@ exports.getAddService=async(req,res,next)=>{
     }
 }
 
-// post add services
-exports.postAddService=async(req,res,next)=>{
+// post add instrument
+exports.postAddInstrument=async(req,res,next)=>{
     try{
-        let {service_name,service_charge,description}=req.body
+        let {name,price,in_stock_quantity,description}=req.body
         db.beginTransaction(async(err)=>{
             if(err){
                 return res.redirect('/')
@@ -129,9 +91,9 @@ exports.postAddService=async(req,res,next)=>{
                     image=`${base_url}/uploads/${req.file.filename}`
                 }
 
-                const insert_service_query=`INSERT INTO our_services (service_name,service_thumbnail_image,service_charge,description) VALUES (?,?,?,?)`
-                const values=[service_name,image,service_charge,description]
-                await queryAsync(insert_service_query,values)
+                const insert_instrument_query=`INSERT INTO instruments (name,image,description,price,in_stock_quantity) VALUES (?,?,?,?,?)`
+                const values=[name,image,description,price,in_stock_quantity]
+                await queryAsync(insert_instrument_query,values)
                 db.commit((err)=>{
                     if(err){
                         db.rollback(()=>{
@@ -141,7 +103,7 @@ exports.postAddService=async(req,res,next)=>{
                     }
                     //req.flash('success', 'Star Insert Success')
                     //return res.json(customer[0])
-                    return res.redirect('/service-list')
+                    return res.redirect('/instruments')
                 })
             }catch(e){
                 db.rollback();
@@ -157,29 +119,18 @@ exports.postAddService=async(req,res,next)=>{
     }
 }
 
-// post edit services
-exports.postEditService=async(req,res,next)=>{
+// get edit instrument
+exports.getEditInstrument=async(req,res,next)=>{
     try{
-        let service_id=req.params.service_id
-        let {service_name,service_charge,description}=req.body
+        const instrument_id=req.params.instrument_id
         db.beginTransaction(async(err)=>{
             if(err){
                 return res.redirect('/')
             }
             try{
-
-                let get_service_query=`SELECT * FROM our_services WHERE service_id=?`
-                let service=await queryAsync(get_service_query,[service_id])
-
-                let image=service[0].service_thumbnail_image
-
-                if(req.file){
-                    image=`${base_url}/uploads/${req.file.filename}`
-                }
-
-                const update_service_query=`UPDATE our_services SET service_name=?, service_thumbnail_image=?, service_charge=?,description=? WHERE service_id=?`
-                const values=[service_name,image,service_charge,description,service_id]
-                await queryAsync(update_service_query,values)
+                const get_instrument_query=`SELECT * FROM instruments WHERE instrument_id=?`
+                const instrument=await queryAsync(get_instrument_query,[instrument_id])
+                
                 db.commit((err)=>{
                     if(err){
                         db.rollback(()=>{
@@ -188,8 +139,8 @@ exports.postEditService=async(req,res,next)=>{
                         })
                     }
                     //req.flash('success', 'Star Insert Success')
-                    //return res.json(customer[0])
-                    return res.redirect('/service-list')
+                    //return res.json(instrument)
+                    return res.render('pages/editInstrument',{title:"Edit Instrument",instrument:instrument[0],nav:"instruments"})
                 })
             }catch(e){
                 db.rollback();
