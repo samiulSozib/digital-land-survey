@@ -1,69 +1,36 @@
 <%- include('../partials/navigation.ejs') %>
 
-<section class="bg-gray-100 px-5 py-5">
 
-          <div class="grid grid-cols-2 xl:grid-cols-4 gap-10">
-
-            <a href="/customer-list">
-              <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-28">
-                <p class="text-4xl xl:text-5xl"><%= customers.length %></p>
-                <p style="margin-bottom: 5px;" class="text-tColor mt-2">Number of Customer</p>
-              </div>
-            </a>
-
-            <a href="/surveyor-list">
-              <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-28 ">
-                <p class="text-5xl"><%= surveyors.length %></p>
-                <p style="margin-bottom: 5px;" class="text-tColor mt-2">Number of Surveyor</p>
-              </div>
-            </a>
-
-            <a href="/service-list">
-              <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-28 ">
-                <p class="text-5xl"><%= services.length %></p>
-                <p style="margin-bottom: 5px;" class="text-tColor mt-2">Number of Services</p>
-              </div>
-            </a>
-
-            <a href="/appointment-list">
-              <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-28 ">
-                <p class="text-5xl"><%= appointments.length %></p>
-                <p style="margin-bottom: 5px;" class="text-tColor mt-2">Overall Appointment</p>
-              </div>
-            </a>
-
-            <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-28 ">
-              <p class="text-5xl"><%= sum_surveyor_transaction[0].total %>&#2547</p>
-              <p style="margin-bottom: 5px;" class="text-tColor mt-2">Total Surveyor Payment</p>
-            </div>
-
-            <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-28 ">
-              <p class="text-5xl"><%= sum_appointment_transaction[0].total %>&#2547</p>
-              <p style="margin-bottom: 5px;" class="text-tColor mt-2">Total Appointment Payment</p>
-            </div>
-
-            <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-28 ">
-              <p class="text-5xl"><%= sum_order_transaction[0].total %>&#2547</p>
-              <p style="margin-bottom: 5px;" class="text-tColor mt-2">Total Order Payment</p>
-            </div>
-
-          </div>
-
+        <section class="bg-gray-100 px-5 py-5">
           <div class="bg-white rounded-xl border-2 border-gray-200 p-5 mt-5">
 
+            <!-- <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-3">
+              <ul class="flex gap-5 border-b-2 pb-2 flex-wrap w-full">
+                <li><a href="" class="font-bold border-b-2 border-black pb-[10px]">All</a></li>
+                <li><a href="">Pending</a></li>
+                <li><a href="">Confirmed</a></li>
+                <li><a href="">Processing</a></li>
+                <li><a href="">Cancelled</a></li>
+              </ul>
+          </div> -->
+
             <div class="my-5 flex justify-between items-center">
-              <p class="font-bold">Recent Appointment</p>
+
+              <div class="bg-white shadow relative rounded-md w-full xl:w-fit">
+                <input class="py-2 pl-3 pr-10 focus:outline-none w-full xl:w-fit xl:max-w-[250px]" type="text" placeholder="Search by order id">
+                <i class="fa-solid fa-magnifying-glass absolute top-1/2 right-3 -translate-y-1/2 text-tColor"></i>
+              </div>
 
               <div class=" flex items-center gap-2">
                 <div class="relative">
-                  <select class=" bg-primaryColor block appearance-none w-full  py-3 px-4 pr-8 rounded-xl leading-tight focus:outline-none shadow">
-                    <option hidden>Filter</option>
-                    <option>Filter 1</option>
-                    <option>Filter 2</option>
-                    <option>Filter 3</option>
-                    <option>Filter 4</option>
+                  <select class=" bg-white block appearance-none w-full text-tColor py-3 px-4 pr-8 rounded-md leading-tight focus:outline-none shadow">
+                    <option hidden>Filter by area range</option>
+                    <option class="text-black">Filter 1</option>
+                    <option class="text-black">Filter 2</option>
+                    <option class="text-black">Filter 3</option>
+                    <option class="text-black">Filter 4</option>
                   </select>
-                  <div class="pointer-events-none absolute inset-y-0 right-1 flex items-center px-2">
+                  <div class="pointer-events-none absolute inset-y-0 right-1 flex items-center px-2 text-tColor">
                     <i class="fa-solid fa-angle-down"></i>
                   </div>
                 </div>
@@ -77,25 +44,39 @@
                   <thead>
                     <tr>
                       <th>S.</th>
-                      <th>SURVEYOR</th>
-                      <th>LAND OWNER</th>
-                      <th>DATE</th>
-                      <th>SERVICE</th>
-                      <th>STATUS</th>
+                      <th>ORDER BY</th>
+                      <th>INSTRUMENT</th>
+                      <th>QUANTITY</th>
+                      <th>TOTAL PRICE</th>
+                      <th>PAYMENT S.</th>
+                      <th>O. STATUS</th>
                       <th>DETAILS</th>
                     </tr>
                   </thead>
                   <tbody>
                     <% let serialNumber = 1; %>
-                    <% for(let appointment of appointments){ %>
+                    <% for(let instruments_order of instruments_orders){ %>
                     <tr>
                       <td><strong><%= serialNumber %></strong></td>
-                      <td><a href="/surveyor-details/<%= appointment.surveyor_id %>"><%= appointment.surveyor_name %></a></td>
-                      <td><a href="/customer-details/<%= appointment.surveyor_id %>"><%= appointment.customer_name %></a></td>
-                      <td><%= appointment.appointment_date %></td>
-                      <td><span class="bg-green-100 text-green-600 p-1 rounded-md text-xs"><a href="/service-edit/<%= appointment.service_id %>"><%= appointment.service_name %></a></span></td>
-                      <td><p class="bg-yellow-100 text-yellow-400 w-fit font-bold p-2 rounded"><%= appointment.status_name %></p></td>
-                      <td><a href="/appointment-details/<%= appointment.appointment_id %>"><i class="fa-solid fa-caret-down border-2 p-2 rounded-[50%] text-tColor border-tColor px-[8px] py-[5px]"></i></a></td>
+                      <% if(instruments_order.surveyor_id===null){ %>
+                        <td><a href="/customer-details/<%= instruments_order.customer_id %>"><strong>C: </strong><%= instruments_order.customer_name %></a></td>
+                        <% }else{ %>
+                            <td><a href="/surveyor-details/<%= instruments_order.surveyor_id %>"><strong>S: </strong><%= instruments_order.surveyor_name %></a></td>
+                        <% } %>
+                      <td><a href="/instrument-edit/<%= instruments_order.instrument_id %>"><%= instruments_order.name %></a></td>
+                      <td><%= instruments_order.quantity %></td>
+                      <td><%= instruments_order.total_price %></td>
+                      <% if(instruments_order.is_verified){ %>
+                        <td><button><i style="color: green;" class="fa-solid fa-unlock"></i></button></td>
+                        <% }else{ %>
+                            <td><button><i style="color: red;" class="fa-solid fa-lock"></i></button></td>
+                        <% } %>
+                        <% if(instruments_order.order_status){ %>
+                            <td><button style="color: green;">Confirm</button></td>
+                            <% }else{ %>
+                                <td><button style="color: red;">Pending</button></td>
+                            <% } %>
+                      <td><a href="/instruments-order-details/<%= instruments_order.order_id %>"><i class="fa-solid fa-caret-down border-2 p-2 rounded-[50%] text-tColor border-tColor px-[8px] py-[5px]"></i></a></td>
                     </tr>
                     <% serialNumber++; %>
                   <% } %>

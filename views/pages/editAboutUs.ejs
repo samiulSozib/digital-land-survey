@@ -1,0 +1,120 @@
+<%- include('../partials/navigation.ejs') %>
+
+
+        <section class="bg-gray-100 px-5 py-5">
+
+          <form action="/about-us-edit/<%= about_us.id %>" method="POST">
+            
+
+            <div>
+              <p class="mt-5 mb-2 text-tColor2 font-semibold">Title</p>
+              <input class="bg-white w-full max-w-[500px] border-[1px] border-primaryColor first-line:appearance-none  rounded-md py-3 px-5 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" id="title" name="title" type="text" placeholder="Please enter title" value="<%= about_us.title %>"/>
+            </div>
+
+            <div>
+                <p class="mt-5 mb-2 text-tColor2 font-semibold">Description</p>
+                <textarea class="bg-white w-full max-w-[500px] border-[1px] border-primaryColor first-line:appearance-none  rounded-md py-3 px-5 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" name="description" id="description" cols="70" rows="10"><%= about_us.description %></textarea>
+              </div>
+
+
+          
+            <div class="mt-5 font-semibold">
+              <button type="submit" class="secondary-btn">Update</button>
+            </div>
+
+          </form>
+
+        </section>
+    
+
+    </div>
+
+</section>
+
+
+
+
+
+<!-- Header Section Script -->
+<script> 
+  // Menu toggle button 
+    const toggleButton = document.getElementById("toggle-button");
+    const toggleMenu = document.getElementById("toggle-menu");
+    var toggleCounter = 1;
+    toggleButton.onclick = function () {
+      toggleCounter++;
+      if(toggleCounter%2 == 0){
+        toggleMenu.classList.remove("hidden");
+        toggleMenu.classList.add("grid");
+      }
+      else{
+        toggleMenu.classList.remove("grid");
+        toggleMenu.classList.add("hidden");
+      }
+    }
+
+
+  </script>
+
+
+<!-- Accordion Script -->
+<script>
+  const accordionButtons = document.querySelectorAll('.accordion-button');
+  const accordionMenu = document.querySelectorAll('.menu-collapse');
+
+  accordionButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const accordionCollapse = button.nextElementSibling;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      accordionCollapse.classList.toggle('hidden');
+    });
+  });
+
+  // Set all accordion items to collapsed state by default
+  document.querySelectorAll('.menu-collapse').forEach(collapse => {
+    collapse.classList.add('hidden');
+  });
+
+
+</script>
+
+
+<!-- Table Script -->
+<script>
+  const tableButtons = document.querySelectorAll('.table-button');
+  const tableMenu = document.querySelectorAll('.table-collapse');
+  const tableClose = document.querySelectorAll('.table-close');
+
+  tableButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const tableCollapse = button.nextElementSibling;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      tableCollapse.classList.toggle('hidden');
+    });
+  });
+
+  tableClose.forEach(button => {
+    button.addEventListener('click', () => {
+      const tableCollapse = button.parentElement.parentElement.parentElement;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      tableCollapse.classList.toggle('hidden');
+    });
+  });
+
+</script>
+
+<script>
+  const tables = document.querySelectorAll('.table-collapse');
+  window.onclick = function (event) {
+  for (let table of tables){
+  if (event.target == table) {
+    table.classList.toggle('hidden');
+  }
+}
+};
+</script>
+
+
+
+</body>
+</html>

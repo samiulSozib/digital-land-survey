@@ -1,0 +1,340 @@
+<%- include('../partials/navigation.ejs') %>
+
+
+        <section class="bg-gray-100 px-5 py-5">
+
+
+          <div class="grid grid-cols-1 md:grid-cols-6 mt-5 gap-10">
+
+            <div class="bg-white md:col-span-3 xl:col-span-4 rounded-lg">
+
+              <div class="flex justify-between items-center px-5 py-2 border-b-2">
+                <p class="font-bold">Order Status</p>
+                <% if (instruments_order.order_status) { %>
+                  <button class="status-change" data-order-id="<%= instruments_order.order_id %>" data-status="<%= instruments_order.order_status %>">
+                      <p class="text-green-500 bg-green-100 rounded-lg p-2">Confirmed</p>
+                  </button>
+              <% } else { %>
+                  <button class="status-change" data-order-id="<%= instruments_order.order_id %>" data-status="<%= instruments_order.order_status %>">
+                      <p class="text-green-500 bg-green-100 rounded-lg p-2">Pending</p>
+                  </button>
+              <% } %>
+              
+                
+              </div>
+              <div class="flex justify-between items-center px-5 py-2 border-b-2">
+                <p><%= instruments_order.name.service_name %></p>
+              </div>
+              
+              <div class="px-5 py-10 grid gap-2">
+                <p class="font-bold">Order Information</p>
+                <div>
+                    <table>
+                        <tr>
+                          <th>Item</th>
+                          <th>Desc.</th>
+                        </tr>
+                        <tr>
+                          <td>Name: </td>
+                          <td><%= instruments_order.order_name %></td>
+                        </tr>
+                        <tr>
+                            <td>Mobile Number: </td>
+                            <td><%= instruments_order.order_mobile_number %></td>
+                        </tr>
+                        <tr>
+                            <td>Address: </td>
+                            <td><%= instruments_order.order_address %></td>
+                        </tr>
+                        <tr>
+                            <td>Instrument Name: </td>
+                            <td><%= instruments_order.name %></td>
+                        </tr>
+                        <tr>
+                            <td>Quantity : </td>
+                            <td><%= instruments_order.quantity %></td>
+                        </tr>
+                        <tr>
+                            <td>Total Price : </td>
+                            <td><%= instruments_order.total_price %></td>
+                        </tr>
+                        
+                        
+   
+                      </table>
+                </div>
+                <p class="font-bold">Transaction Information</p>
+                <div>
+                    <table>
+                        <tr>
+                            <th>Item</th>
+                            <th>Desc.</th>
+                          </tr>
+                          <tr>
+                            <td>Account Number: </td>
+                            <td><%= instruments_order.account_number %></td>
+                          </tr>
+                          <tr>
+                            <td>Account Type: </td>
+                            <td><%= instruments_order.account_type %></td>
+                          </tr>
+                          <tr>
+                            <td>Amount: </td>
+                            <td><%= instruments_order.amount %></td>
+                          </tr>
+                          <tr>
+                            <td>Transaction ID: </td>
+                            <td><%= instruments_order.transaction_id %></td>
+                          </tr>
+                          <tr>
+                            <td>Address: </td>
+                            <td><%= instruments_order.address %></td>
+                          </tr>
+                          <tr>
+                            <td>Verified: </td>
+                            <% if (instruments_order.is_verified) { %>
+                              <td><button class="verification-change" data-instruments_orders_transaction-id="<%= instruments_order.order_transaction_id %>" data-is-verified="<%= instruments_order.is_verified %>">
+                                <p class="text-green-500 bg-green-100 rounded-lg p-2">YES</p>
+                            </button></td>
+                          <% } else { %>
+                            <td><button class="verification-change" data-instruments_orders_transaction-id="<%= instruments_order.order_transaction_id %>" data-is-verified="<%= instruments_order.is_verified %>">
+                              <p class="text-green-500 bg-green-100 rounded-lg p-2">NO</p>
+                              </button></td>
+                          <% } %>
+                          </tr>
+                    </table>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="bg-white md:col-span-3 xl:col-span-2 rounded-lg">
+
+              
+              <% if(instruments_order.surveyor_id!=null){ %>
+                <div class="flex justify-between items-center px-5 py-4 border-b-2">
+                    <p class="font-bold">Order By Surveyor</p>
+                  </div>
+              <a href="/surveyor-details/<%= instruments_order.surveyor_id %>" style="cursor: pointer;">
+                <div class="flex items-center gap-5 p-5 border-b-2">
+                    <div class="h-20 aspect-square rounded-[50%]">
+                        <% if(instruments_order.surveyor_image){ %>
+                            <img src="<%= instruments_order.surveyor_image %>" alt="">
+                            <% } %>
+                    </div>
+                    <div>
+                      <p class="font-bold"><%= instruments_order.surveyor_name %></p>
+                      <p class="text-tColor text-sm"><%= instruments_order.surveyor_mobile_number %></p>
+                    </div>
+                  </div>
+              </a>
+              <% }else{ %>
+                <div class="flex justify-between items-center px-5 py-4 border-b-2">
+                    <p class="font-bold">Order By Customer</p>
+                  </div>
+                <a href="/customer-details/<%= instruments_order.customer_id %>">
+                    <div class="flex items-center gap-5 p-5 border-b-2">
+                        <div class="h-20 aspect-square rounded-[50%]">
+                            <% if(instruments_order.customer_image){ %>
+                                <img src="<%= instruments_order.customer_image %>" alt="">
+                                <% } %>
+                        </div>
+                        <div>
+                          <p class="font-bold"><%= instruments_order.customer_name %></p>
+                          <p class="text-tColor text-sm"><%= instruments_order.customer_mobile_number %></p>
+                        </div>
+                      </div>
+                </a>
+                <% } %>
+
+            </div>
+
+          </div>
+
+        </section>
+    
+
+    </div>
+
+</section>
+
+
+
+
+
+<!-- Header Section Script -->
+<script> 
+  // Menu toggle button 
+    const toggleButton = document.getElementById("toggle-button");
+    const toggleMenu = document.getElementById("toggle-menu");
+    var toggleCounter = 1;
+    toggleButton.onclick = function () {
+      toggleCounter++;
+      if(toggleCounter%2 == 0){
+        toggleMenu.classList.remove("hidden");
+        toggleMenu.classList.add("grid");
+      }
+      else{
+        toggleMenu.classList.remove("grid");
+        toggleMenu.classList.add("hidden");
+      }
+    }
+
+
+  </script>
+
+
+<!-- Accordion Script -->
+<script>
+  const accordionButtons = document.querySelectorAll('.accordion-button');
+  const accordionMenu = document.querySelectorAll('.menu-collapse');
+
+  accordionButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const accordionCollapse = button.nextElementSibling;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      accordionCollapse.classList.toggle('hidden');
+    });
+  });
+
+  // Set all accordion items to collapsed state by default
+  document.querySelectorAll('.menu-collapse').forEach(collapse => {
+    collapse.classList.add('hidden');
+  });
+
+
+</script>
+
+
+<!-- Table Script -->
+<script>
+  const tableButtons = document.querySelectorAll('.table-button');
+  const tableMenu = document.querySelectorAll('.table-collapse');
+  const tableClose = document.querySelectorAll('.table-close');
+
+  tableButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const tableCollapse = button.nextElementSibling;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      tableCollapse.classList.toggle('hidden');
+    });
+  });
+
+  tableClose.forEach(button => {
+    button.addEventListener('click', () => {
+      const tableCollapse = button.parentElement.parentElement.parentElement;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      tableCollapse.classList.toggle('hidden');
+    });
+  });
+
+</script>
+
+<script>
+  const tables = document.querySelectorAll('.table-collapse');
+  window.onclick = function (event) {
+  for (let table of tables){
+  if (event.target == table) {
+    table.classList.toggle('hidden');
+  }
+}
+};
+</script>
+
+<!-- script for order status change -->
+<script>
+  // Inside your script tag
+
+const statusChangeButtons = document.querySelectorAll(".status-change");
+
+statusChangeButtons.forEach(button => {
+    button.addEventListener("click", async function (event) {
+      const order_id = this.getAttribute("data-order-id");
+      const order_status = this.getAttribute("data-status");
+      const confirmed = confirm('Do you want to change status?');
+
+      if (!confirmed) {
+        return;
+      }
+
+      const apiUrl = `/api/instruments-orders-status-change?order_id=${order_id}`;
+      console.log(apiUrl)
+      const dataToSend = {
+        is_confirmed: order_status == 0 ? 1 : 0,
+      };
+
+        try {
+            const response = await axios.post(apiUrl, dataToSend);
+
+            if (response.status === 200) {
+                
+                const buttonText = this.querySelector("p");
+                buttonText.textContent = order_status==0?"Confirmed":"Pending"
+                alert("Successfully changed status");
+                this.setAttribute("data-status", order_status == 0 ? 1 : 0);
+            } else {
+                alert("API request failed");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Verification change failed");
+        }
+    });
+});
+
+</script>
+
+<!-- script for order status change -->
+
+
+<!-- script for verification change -->
+<script>
+  const verification_change_button = document.querySelectorAll('.verification-change');
+
+verification_change_button.forEach((button) => {
+  button.addEventListener("click", async function (event) {
+    const transaction_id = this.getAttribute("data-instruments_orders_transaction-id");
+    const current_verified_status = this.getAttribute("data-is-verified");
+    //console.log(instruments_orders_transaction_id + " " + current_verified_status);
+    const confirmed = confirm('Do you want to change verification status?');
+
+    if (!confirmed) {
+      return;
+    }
+
+    const apiUrl = `/api/instruments-orders-transaction-verify?instruments_orders_transaction_id=${transaction_id}`;
+    //console.log(apiUrl)
+    const dataToSend = {
+      is_verified: current_verified_status == 0 ? 1 : 0,
+    };
+    try {
+      const response = await axios.post(apiUrl, dataToSend);
+
+      console.log(response);
+
+      if (response.status !== 200) {
+        alert("API request failed");
+      } else {
+        
+
+        alert("Successfully changed verification status");
+        this.setAttribute("data-is-verified", current_verified_status == 0 ? 1 : 0);
+        const buttonText = this.querySelector("p");
+        buttonText.textContent = current_verified_status==0?"YES":"NO";
+
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Verification change failed");
+    }
+  });
+});
+
+</script>
+
+<!-- script for verification change -->
+
+
+
+</body>
+</html>

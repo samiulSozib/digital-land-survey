@@ -1,69 +1,32 @@
 <%- include('../partials/navigation.ejs') %>
 
-<section class="bg-gray-100 px-5 py-5">
+        <section class="bg-gray-100 px-5 py-5">
 
-          <div class="grid grid-cols-2 xl:grid-cols-4 gap-10">
+         
 
-            <a href="/customer-list">
-              <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-28">
-                <p class="text-4xl xl:text-5xl"><%= customers.length %></p>
-                <p style="margin-bottom: 5px;" class="text-tColor mt-2">Number of Customer</p>
-              </div>
-            </a>
+          <div class="bg-white rounded-xl border-2 border-gray-200 px-5">
 
-            <a href="/surveyor-list">
-              <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-28 ">
-                <p class="text-5xl"><%= surveyors.length %></p>
-                <p style="margin-bottom: 5px;" class="text-tColor mt-2">Number of Surveyor</p>
-              </div>
-            </a>
-
-            <a href="/service-list">
-              <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-28 ">
-                <p class="text-5xl"><%= services.length %></p>
-                <p style="margin-bottom: 5px;" class="text-tColor mt-2">Number of Services</p>
-              </div>
-            </a>
-
-            <a href="/appointment-list">
-              <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-28 ">
-                <p class="text-5xl"><%= appointments.length %></p>
-                <p style="margin-bottom: 5px;" class="text-tColor mt-2">Overall Appointment</p>
-              </div>
-            </a>
-
-            <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-28 ">
-              <p class="text-5xl"><%= sum_surveyor_transaction[0].total %>&#2547</p>
-              <p style="margin-bottom: 5px;" class="text-tColor mt-2">Total Surveyor Payment</p>
-            </div>
-
-            <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-28 ">
-              <p class="text-5xl"><%= sum_appointment_transaction[0].total %>&#2547</p>
-              <p style="margin-bottom: 5px;" class="text-tColor mt-2">Total Appointment Payment</p>
-            </div>
-
-            <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-28 ">
-              <p class="text-5xl"><%= sum_order_transaction[0].total %>&#2547</p>
-              <p style="margin-bottom: 5px;" class="text-tColor mt-2">Total Order Payment</p>
-            </div>
-
-          </div>
-
-          <div class="bg-white rounded-xl border-2 border-gray-200 p-5 mt-5">
 
             <div class="my-5 flex justify-between items-center">
-              <p class="font-bold">Recent Appointment</p>
+
+              <div class="flex items-center gap-5">
+                <div class="bg-white shadow relative rounded-md w-full xl:w-fit">
+                  <input class="py-2 pl-3 pr-10 focus:outline-none w-full xl:w-fit xl:max-w-[250px]" type="text" placeholder="Search">
+                  <i class="fa-solid fa-magnifying-glass absolute top-1/2 right-3 -translate-y-1/2 text-tColor"></i>
+                </div>
+
+              </div>
 
               <div class=" flex items-center gap-2">
                 <div class="relative">
-                  <select class=" bg-primaryColor block appearance-none w-full  py-3 px-4 pr-8 rounded-xl leading-tight focus:outline-none shadow">
-                    <option hidden>Filter</option>
-                    <option>Filter 1</option>
-                    <option>Filter 2</option>
-                    <option>Filter 3</option>
-                    <option>Filter 4</option>
+                  <select class=" bg-white block appearance-none w-full text-tColor py-3 px-4 pr-8 rounded-md leading-tight focus:outline-none shadow">
+                    <option hidden>Filter by area range</option>
+                    <option class="text-black">Filter 1</option>
+                    <option class="text-black">Filter 2</option>
+                    <option class="text-black">Filter 3</option>
+                    <option class="text-black">Filter 4</option>
                   </select>
-                  <div class="pointer-events-none absolute inset-y-0 right-1 flex items-center px-2">
+                  <div class="pointer-events-none absolute inset-y-0 right-1 flex items-center px-2 text-tColor">
                     <i class="fa-solid fa-angle-down"></i>
                   </div>
                 </div>
@@ -76,32 +39,50 @@
                 <table class="table-auto text-xs md:text-sm profile-table w-[300%] md:w-full shadow">
                   <thead>
                     <tr>
-                      <th>S.</th>
-                      <th>SURVEYOR</th>
-                      <th>LAND OWNER</th>
-                      <th>DATE</th>
-                      <th>SERVICE</th>
-                      <th>STATUS</th>
-                      <th>DETAILS</th>
+                      <th style="width: 5%;">S.</th>
+                      <th style="width: 10%;">ORDER ID</th>
+                      <th style="width: 10%;">ORDER. STATUS</th>
+                      <th style="width: 15%;">ACCOUNT NUMBER</th>
+                      <th style="width: 15%;">ACCOUNT TYPE</th>
+                      <th style="width: 10%;">AMOUNT</th>
+                      <th style="width: 15%;">TR ID</th>
+                      <th style="width: 5%;">VERIFIED</th>
+                      <!-- <th style="width: 10%;">ACTION</th> -->
+                      <th style="width: 15%;"></th>
                     </tr>
                   </thead>
                   <tbody>
                     <% let serialNumber = 1; %>
-                    <% for(let appointment of appointments){ %>
+                    <% for(let instruments_orders_transaction of instruments_orders_transactions){ %>
                     <tr>
                       <td><strong><%= serialNumber %></strong></td>
-                      <td><a href="/surveyor-details/<%= appointment.surveyor_id %>"><%= appointment.surveyor_name %></a></td>
-                      <td><a href="/customer-details/<%= appointment.surveyor_id %>"><%= appointment.customer_name %></a></td>
-                      <td><%= appointment.appointment_date %></td>
-                      <td><span class="bg-green-100 text-green-600 p-1 rounded-md text-xs"><a href="/service-edit/<%= appointment.service_id %>"><%= appointment.service_name %></a></span></td>
-                      <td><p class="bg-yellow-100 text-yellow-400 w-fit font-bold p-2 rounded"><%= appointment.status_name %></p></td>
-                      <td><a href="/appointment-details/<%= appointment.appointment_id %>"><i class="fa-solid fa-caret-down border-2 p-2 rounded-[50%] text-tColor border-tColor px-[8px] py-[5px]"></i></a></td>
+                      <td><a href="/instruments-order-details/<%= instruments_orders_transaction.order_id %>" class="primary-btn">View</a></td>
+                      <% if(instruments_orders_transaction.order_status){ %>
+                        <td>Confirmed</td>
+                    <% }else{ %>
+                        <td>Pending</td>
+                    <% } %>
+                      
+                      <td><%= instruments_orders_transaction.account_number %></td>
+                      <td class="text-tColor"><%= instruments_orders_transaction.account_type %></td>
+                      <td class="text-tColor"><%= instruments_orders_transaction.amount %></td>
+                      <td class="text-tColor"><%= instruments_orders_transaction.transaction_id %></td>
+                      <span class="approval-icon">
+                      <% if(instruments_orders_transaction.is_verified) {%>
+                        <td><button class="verification-change" data-instruments_orders_transaction-id="<%= instruments_orders_transaction.order_transaction_id %>" data-is-verified="<%= instruments_orders_transaction.is_verified %>"><i style="color: green;" class="fa-solid fa-unlock"></i></button></td>
+                    <% }else{ %>
+                        <td><button class="verification-change" data-instruments_orders_transaction-id="<%= instruments_orders_transaction.order_transaction_id %>" data-is-verified="<%= instruments_orders_transaction.is_verified %>"><i style="color: red;" class="fa-solid fa-lock"></i></button></td>
+                        <% } %>
+                      </span>
+                      <td><div class="text-tColor flex items-center gap-3 text-lg">
+                        <!-- <button><i class="fa-regular fa-pen-to-square"></i></button> -->
+                        
+                        <button><i style="color: darkred;" class="fa-regular fa-trash-can"></i></button>
+                      </div></td>
+                      <!-- <td><a href="landwonerDetails.html" class="primary-btn w-fit">View Details</a></td> -->
                     </tr>
                     <% serialNumber++; %>
-                  <% } %>
-
-  
-
+                    <% } %>
                   </tbody>
                 </table>
   
@@ -242,7 +223,58 @@
 };
 </script>
 
+<!-- script for verification change -->
+<script>
+  const verification_change_buttin = document.querySelectorAll('.verification-change');
 
+verification_change_buttin.forEach((button) => {
+  button.addEventListener("click", async function (event) {
+    const transaction_id = this.getAttribute("data-instruments_orders_transaction-id");
+    const current_verified_status = this.getAttribute("data-is-verified");
+    //console.log(instruments_orders_transaction_id + " " + current_verified_status);
+    const confirmed = confirm('Do you want to change verification status?');
+
+    if (!confirmed) {
+      return;
+    }
+
+    const apiUrl = `/api/instruments-orders-transaction-verify?instruments_orders_transaction_id=${transaction_id}`;
+    console.log(apiUrl)
+    const dataToSend = {
+      is_verified: current_verified_status == 0 ? 1 : 0,
+    };
+    try {
+      const response = await axios.post(apiUrl, dataToSend);
+
+      console.log(response);
+
+      if (response.status !== 200) {
+        alert("API request failed");
+      } else {
+        // Get the approval icon element
+        const approvalIcon = button.querySelector('.fa-solid');
+        // Update the icon based on the new approval status
+        if (current_verified_status == 0) {
+          approvalIcon.style.color = 'green';
+          approvalIcon.className = 'fa-solid fa-unlock';
+        } else {
+          approvalIcon.style.color = 'red';
+          approvalIcon.className = 'fa-solid fa-lock';
+        }
+
+        alert("Successfully changed verification status");
+        this.setAttribute("data-is-verified", current_verified_status == 0 ? 1 : 0);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Verification change failed");
+    }
+  });
+});
+
+</script>
+
+<!-- script for verification change -->
 
 </body>
 </html>

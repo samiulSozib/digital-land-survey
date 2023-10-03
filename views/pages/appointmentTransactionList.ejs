@@ -56,7 +56,7 @@
                     <% for(let transaction of transactions){ %>
                     <tr>
                       <td><strong><%= serialNumber %></strong></td>
-                      <td><%= transaction.appointment_id %></td>
+                      <td><a href="/appointment-details/<%= transaction.appointment_id %>" class="primary-btn">View</a></td>
                       <td><%= transaction.status_name %></td>
                       <td><%= transaction.account_number %></td>
                       <td class="text-tColor"><%= transaction.account_type %></td>

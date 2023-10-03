@@ -30,6 +30,13 @@ exports.getDashboard=async(req,res,next)=>{
                                         INNER JOIN appointment_status as st ON a.appointment_status=st.appointment_status_id
                                         `; 
                 const appointments = await queryAsyncWithoutValue(get_appointments_query);
+                const sum_order_transaction_query=`SELECT SUM(amount) as total FROM order_transaction`
+                const sum_surveyor_transaction_query=`SELECT SUM(amount) as total FROM surveyor_transaction`
+                const sum_appointment_transaction_query=`SELECT SUM(amount) as total FROM transaction`
+
+                const sum_order_transaction=await queryAsyncWithoutValue(sum_order_transaction_query)
+                const sum_surveyor_transaction=await queryAsyncWithoutValue(sum_surveyor_transaction_query)
+                const sum_appointment_transaction=await queryAsyncWithoutValue(sum_appointment_transaction_query)
 
 
                 db.commit((err)=>{
@@ -40,7 +47,17 @@ exports.getDashboard=async(req,res,next)=>{
                         })
                     }
                     //req.flash('success', 'Star Insert Success')
-                    return res.render('pages/dashboard',{title:"Dashboard",nav:"dashboard",customers,surveyors,services,appointments})
+                    
+                    return res.render('pages/dashboard',{title:"Dashboard",
+                    nav:"dashboard",
+                    customers,
+                    surveyors,
+                    services,
+                    appointments,
+                    sum_order_transaction,
+                    sum_surveyor_transaction,
+                    sum_appointment_transaction
+                })
                 })
             }catch(e){
                 db.rollback();

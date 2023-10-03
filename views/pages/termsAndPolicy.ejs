@@ -1,73 +1,22 @@
 <%- include('../partials/navigation.ejs') %>
 
-<section class="bg-gray-100 px-5 py-5">
+        <section class="bg-gray-100 px-5 py-5">
 
-          <div class="grid grid-cols-2 xl:grid-cols-4 gap-10">
+         
 
-            <a href="/customer-list">
-              <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-28">
-                <p class="text-4xl xl:text-5xl"><%= customers.length %></p>
-                <p style="margin-bottom: 5px;" class="text-tColor mt-2">Number of Customer</p>
-              </div>
-            </a>
+          <div class="bg-white rounded-xl border-2 border-gray-200 px-5">
 
-            <a href="/surveyor-list">
-              <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-28 ">
-                <p class="text-5xl"><%= surveyors.length %></p>
-                <p style="margin-bottom: 5px;" class="text-tColor mt-2">Number of Surveyor</p>
-              </div>
-            </a>
-
-            <a href="/service-list">
-              <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-28 ">
-                <p class="text-5xl"><%= services.length %></p>
-                <p style="margin-bottom: 5px;" class="text-tColor mt-2">Number of Services</p>
-              </div>
-            </a>
-
-            <a href="/appointment-list">
-              <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-28 ">
-                <p class="text-5xl"><%= appointments.length %></p>
-                <p style="margin-bottom: 5px;" class="text-tColor mt-2">Overall Appointment</p>
-              </div>
-            </a>
-
-            <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-28 ">
-              <p class="text-5xl"><%= sum_surveyor_transaction[0].total %>&#2547</p>
-              <p style="margin-bottom: 5px;" class="text-tColor mt-2">Total Surveyor Payment</p>
-            </div>
-
-            <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-28 ">
-              <p class="text-5xl"><%= sum_appointment_transaction[0].total %>&#2547</p>
-              <p style="margin-bottom: 5px;" class="text-tColor mt-2">Total Appointment Payment</p>
-            </div>
-
-            <div class="bg-white rounded-3xl flex justify-center items-center flex-col h-28 ">
-              <p class="text-5xl"><%= sum_order_transaction[0].total %>&#2547</p>
-              <p style="margin-bottom: 5px;" class="text-tColor mt-2">Total Order Payment</p>
-            </div>
-
-          </div>
-
-          <div class="bg-white rounded-xl border-2 border-gray-200 p-5 mt-5">
 
             <div class="my-5 flex justify-between items-center">
-              <p class="font-bold">Recent Appointment</p>
 
-              <div class=" flex items-center gap-2">
-                <div class="relative">
-                  <select class=" bg-primaryColor block appearance-none w-full  py-3 px-4 pr-8 rounded-xl leading-tight focus:outline-none shadow">
-                    <option hidden>Filter</option>
-                    <option>Filter 1</option>
-                    <option>Filter 2</option>
-                    <option>Filter 3</option>
-                    <option>Filter 4</option>
-                  </select>
-                  <div class="pointer-events-none absolute inset-y-0 right-1 flex items-center px-2">
-                    <i class="fa-solid fa-angle-down"></i>
-                  </div>
+              <div class="flex items-center gap-5">
+                <div class="bg-white shadow relative rounded-md w-full xl:w-fit">
+                  <input class="py-2 pl-3 pr-10 focus:outline-none w-full xl:w-fit xl:max-w-[250px]" type="text" placeholder="Search">
+                  <i class="fa-solid fa-magnifying-glass absolute top-1/2 right-3 -translate-y-1/2 text-tColor"></i>
                 </div>
+
               </div>
+              <a href="/terms-and-policy-add" class="primary-btn">Add Terms And Policy +</a>
             </div>
 
             <div class="flex flex-col justify-around">
@@ -76,31 +25,27 @@
                 <table class="table-auto text-xs md:text-sm profile-table w-[300%] md:w-full shadow">
                   <thead>
                     <tr>
-                      <th>S.</th>
-                      <th>SURVEYOR</th>
-                      <th>LAND OWNER</th>
-                      <th>DATE</th>
-                      <th>SERVICE</th>
-                      <th>STATUS</th>
-                      <th>DETAILS</th>
+                      <th style="width: 5%;">S.</th>
+                      <th style="width: 15%;">TITLE</th>
+                      <th style="width: 10%;">DESCRIPTION</th>
+                      <th style="width: 10%;">ACTION</th>
                     </tr>
                   </thead>
                   <tbody>
                     <% let serialNumber = 1; %>
-                    <% for(let appointment of appointments){ %>
+                    <% for(let terms of terms_and_policy){ %>
                     <tr>
                       <td><strong><%= serialNumber %></strong></td>
-                      <td><a href="/surveyor-details/<%= appointment.surveyor_id %>"><%= appointment.surveyor_name %></a></td>
-                      <td><a href="/customer-details/<%= appointment.surveyor_id %>"><%= appointment.customer_name %></a></td>
-                      <td><%= appointment.appointment_date %></td>
-                      <td><span class="bg-green-100 text-green-600 p-1 rounded-md text-xs"><a href="/service-edit/<%= appointment.service_id %>"><%= appointment.service_name %></a></span></td>
-                      <td><p class="bg-yellow-100 text-yellow-400 w-fit font-bold p-2 rounded"><%= appointment.status_name %></p></td>
-                      <td><a href="/appointment-details/<%= appointment.appointment_id %>"><i class="fa-solid fa-caret-down border-2 p-2 rounded-[50%] text-tColor border-tColor px-[8px] py-[5px]"></i></a></td>
+                      <td><%= terms.title %></td>
+                      
+                      <td><%= terms.description %></td>
+                      <td><div class="text-tColor flex items-center gap-3 text-lg">
+                        <a href="/terms-and-policy-edit/<%= terms.id %>"><i class="fa-regular fa-pen-to-square"></i></a>
+                      </div></td>
                     </tr>
                     <% serialNumber++; %>
                   <% } %>
 
-  
 
                   </tbody>
                 </table>
@@ -241,6 +186,7 @@
 }
 };
 </script>
+
 
 
 

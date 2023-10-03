@@ -57,7 +57,7 @@ const {getAllsocial_media_link,deletesocial_media_link}=require('../../controlle
 
 
 // instruments
-const {getAllInstruments,getInstrumentById,deleteInstrument}=require('../../controller/api/instrumentController')
+const {getAllInstruments,getInstrumentById,deleteInstrument,postInstrumentOrder,instruments_ordersTransactionVerificationChange,changeOrderStatus}=require('../../controller/api/instrumentController')
 
 
 
@@ -195,6 +195,11 @@ router.get('/instruments',getAllInstruments)
 router.get('/instruments/instrument-id',getInstrumentById)
 // delete instrument
 router.delete('/instrument-delete',deleteInstrument)
+// for post instrument order and transaction
+router.post('/instrument-order-create',postInstrumentOrder)
+// for change order transaction verification id 
+router.post('/instruments-orders-transaction-verify',instruments_ordersTransactionVerificationChange)
+router.post('/instruments-orders-status-change',changeOrderStatus)
 
 // ----------------------------------------------------------instruments--------------------------------------------------------------
 

@@ -3,7 +3,7 @@
 
         <section class="bg-gray-100 px-5 py-5">
 
-          <form action="/service-edit/<%= service.service_id %>" method="POST" enctype="multipart/form-data">
+          <form action="/social-media-edit/<%= social_media.id %>" method="POST" enctype="multipart/form-data">
             <div class="flex gap-5 flex-wrap items-center">
               
               <div class="flex items-center">
@@ -19,27 +19,23 @@
                           </svg>                         
                         <p class="mb-1 text-sm font-semibold text-tColor text-center mt-3">Upload Your <br> Services Picture</p>
                     </div> -->
-                    <img style="height: 100px; width: 175px;" src="<%= service.service_thumbnail_image %>" alt="" >
-                    <input name="service_thumbnail_image" class="service_thumbnail_image custom-service-image-label" type="file"  />
+                    <img style="height: 100px; width: 175px;" src="<%= social_media.image %>" alt="" >
+                    <input name="social_media_image" class="social_media_image custom-social-media-image-label" type="file"  />
                 </label>
               </div>
 
             </div>
 
             <div>
-              <p class="mt-5 mb-2 text-tColor2 font-semibold">Services Name</p>
-              <input class="bg-white w-full max-w-[500px] border-[1px] border-primaryColor first-line:appearance-none  rounded-md py-3 px-5 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" id="service_name" name="service_name" type="text" placeholder="Please enter service name" value="<%= service.service_name %>"/>
+              <p class="mt-5 mb-2 text-tColor2 font-semibold">Name</p>
+              <input class="bg-white w-full max-w-[500px] border-[1px] border-primaryColor first-line:appearance-none  rounded-md py-3 px-5 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" id="name" name="name" type="text" placeholder="Please enter service name" value="<%= social_media.name %>"/>
             </div>
 
             <div>
-                <p class="mt-5 mb-2 text-tColor2 font-semibold">Services Charge</p>
-                <input class="bg-white w-full max-w-[500px] border-[1px] border-primaryColor first-line:appearance-none  rounded-md py-3 px-5 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" id="service_charge" name="service_charge" type="text" placeholder="Please enter service Charge" value="<%= service.service_charge %>"/>
+                <p class="mt-5 mb-2 text-tColor2 font-semibold">Link</p>
+                <input class="bg-white w-full max-w-[500px] border-[1px] border-primaryColor first-line:appearance-none  rounded-md py-3 px-5 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" id="link" name="link" type="text" placeholder="Please enter Link" value="<%= social_media.link %>"/>
               </div>
 
-              <div>
-                <p class="mt-5 mb-2 text-tColor2 font-semibold">Services Description</p>
-                <textarea class="bg-white w-full max-w-[500px] border-[1px] border-primaryColor first-line:appearance-none  rounded-md py-3 px-5 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" name="description" id="description" cols="70" rows="10"><%= service.description %></textarea>
-              </div>
 
           
             <div class="mt-5 font-semibold">
@@ -139,9 +135,9 @@
 </script>
 
 <script>
-    $('.service_thumbnail_image').on('change', function(e) {
+    $('.social_media_image').on('change', function(e) {
       let filename = e.target.files[0].name
-      $(this).next('.service_thumbnail_image-label').html(filename)
+      $(this).next('.custom-social-media-image-label').html(filename)
   })
   
   

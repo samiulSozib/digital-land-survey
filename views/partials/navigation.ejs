@@ -56,7 +56,7 @@
 
                 <a class="menu-list <%= nav==="surveyor_transaction"?"menu-list-active":"" %>" href="/surveyor-transaction-list">
                   <div class="h-5 w-5 flex items-center justify-center"><i class="fa-solid fa-credit-card"></i></div>
-                  <span>Surveyor Transaction</span>
+                  <span>Surveyor Tran.</span>
                 </a>
 
                 <!-- <a class="menu-list" href="postList.html">
@@ -86,14 +86,40 @@
                   <span>Appointment Tran.</span>
                 </a>
 
+      
+
                 <a class="menu-list <%= nav==="instruments"?"menu-list-active":"" %>" href="/instruments">
                   <div class="h-5 w-5 flex items-center justify-center"><i class="fa-solid fa-book"></i></div>
                   <span>Instruments</span>
+                </a>
+
+                <a class="menu-list <%= nav==="instruments_order"?"menu-list-active":"" %>" href="/instruments-order">
+                  <div class="h-5 w-5 flex items-center justify-center"><i class="fa-solid fa-book"></i></div>
+                  <span>Instruments Order</span>
+                </a>
+
+                <a class="menu-list <%= nav==="instruments_transaction"?"menu-list-active":"" %>" href="/instruments-transaction">
+                  <div class="h-5 w-5 flex items-center justify-center"><i class="fa-solid fa-book"></i></div>
+                  <span>Instruments Tran.</span>
                 </a>
                 
                 <a class="menu-list <%= nav==="contact_us"?"menu-list-active":"" %>" href="/contact-us">
                   <div class="h-5 w-5 flex items-center justify-center"><i class="fa-solid fa-book"></i></div>
                   <span>Contact Us</span>
+                </a>
+                <a class="menu-list <%= nav==="socail_media"?"menu-list-active":"" %>" href="/social-media">
+                  <div class="h-5 w-5 flex items-center justify-center"><i class="fa-solid fa-book"></i></div>
+                  <span>Social Media</span>
+                </a>
+
+                <a class="menu-list <%= nav==="about_us"?"menu-list-active":"" %>" href="/about-us">
+                  <div class="h-5 w-5 flex items-center justify-center"><i class="fa-solid fa-book"></i></div>
+                  <span>About Us</span>
+                </a>
+
+                <a class="menu-list <%= nav==="terms_and_policy"?"menu-list-active":"" %>" href="/terms-and-policy">
+                  <div class="h-5 w-5 flex items-center justify-center"><i class="fa-solid fa-book"></i></div>
+                  <span>Terms & Policy</span>
                 </a>
 
               </div>
@@ -101,23 +127,7 @@
           </div>
 
           <!-- Logout Menu Section -->
-          <div class="flex items-center xl:px-5 xl:py-3 gap-16 xl:gap-0">
 
-              <a class="text-tColor hover:text-red-500 stroke-tColor hover:stroke-red-500 hover:bg-transparent flex gap-3 items-center font-medium text-sm px-5 py-3 rounded-l-full" href="/logout">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M15.75 9V5.25C15.75 4.65326 15.5129 4.08097 15.091 3.65901C14.669 3.23705 14.0967 3 13.5 3H7.5C6.90326 3 6.33097 3.23705 5.90901 3.65901C5.48705 4.08097 5.25 4.65326 5.25 5.25V18.75C5.25 19.3467 5.48705 19.919 5.90901 20.341C6.33097 20.7629 6.90326 21 7.5 21H13.5C14.0967 21 14.669 20.7629 15.091 20.341C15.5129 19.919 15.75 19.3467 15.75 18.75V15M18.75 15L21.75 12M21.75 12L18.75 9M21.75 12H9" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                       
-                  <span class="hidden md:block">Log Out</span>
-              </a>
-              
-              <button class="block xl:hidden" id="toggle-button">
-                  <svg class="-mr-[1px]" height="24px" width="24px" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
-                    </svg>
-              </button>    
-
-          </div>
               
        
 
@@ -168,5 +178,22 @@
 
 
           </div>
+          <div class="">
+
+            <a class="text-tColor hover:text-red-500 stroke-tColor hover:stroke-red-500 hover:bg-transparent flex gap-3 items-center font-medium text-sm rounded-l-full" href="/logout">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15.75 9V5.25C15.75 4.65326 15.5129 4.08097 15.091 3.65901C14.669 3.23705 14.0967 3 13.5 3H7.5C6.90326 3 6.33097 3.23705 5.90901 3.65901C5.48705 4.08097 5.25 4.65326 5.25 5.25V18.75C5.25 19.3467 5.48705 19.919 5.90901 20.341C6.33097 20.7629 6.90326 21 7.5 21H13.5C14.0967 21 14.669 20.7629 15.091 20.341C15.5129 19.919 15.75 19.3467 15.75 18.75V15M18.75 15L21.75 12M21.75 12L18.75 9M21.75 12H9" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                     
+                <span class="hidden md:block">Log Out</span>
+            </a>
+            
+            <button class="block xl:hidden" id="toggle-button">
+                <svg class="-mr-[1px]" height="24px" width="24px" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+                  </svg>
+            </button>    
+
+        </div>
             
         </section>
