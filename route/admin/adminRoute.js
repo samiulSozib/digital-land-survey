@@ -1,6 +1,7 @@
 const router=require('express').Router()
 // middleware
 const upload=require('../../middleware/upload')
+const multiUpload=require('../../middleware/multiupload')
 const adminAuth=require('../../middleware/authMiddleware')
 
 // admin auth controller
@@ -54,6 +55,24 @@ const {getAboutUs,getEditAboutUs,postEditAboutUs}=require('../../controller/admi
 
 // terms_and_policy
 const {getTermsPolicy,getAddTermsaAndPolicy,getEditTermsAndPolicy,postAddTermsAndPolicy,postEditTermsAndPolicy}=require('../../controller/admin/terms_and_policy')
+
+// course
+const {getCourse,getAddCourse,
+    postAddCourse,
+    getCourseDetails,
+    postAddCourseVideo,
+    postAddCourseFile,
+    getCourseEnrollTransaction,
+    getEditCourse,
+    editCourse
+    }=require('../../controller/admin/courseController')
+
+// teacher
+const {getTeacher,getAddTeacher,postAddTeacher,getEditTeacher,postEditTeacher}=require('../../controller/admin/teacherController')
+
+// banner
+const {getBanner,getEditBanner,postEditBanner}=require('../../controller/admin/bannerController')
+
 
 
 // -------------------------------------------------routing-------------------------------------------------------
@@ -191,6 +210,55 @@ router.post('/terms-and-policy-add',adminAuth,postAddTermsAndPolicy)
 router.post('/terms-and-policy-edit/:terms_and_policy_id',adminAuth,postEditTermsAndPolicy)
 // -------------------------------------------------terms_and_policy-------------------------------------------------------
 
+
+
+// -------------------------------------------------course-------------------------------------------------------
+// for get course
+router.get('/course',adminAuth,getCourse)
+// for get add course
+router.get('/course-add',adminAuth,getAddCourse)
+// for post add course
+router.post('/course-add',adminAuth,multiUpload.fields([{name:"course_thumbnail_image"},{name:"video"}]),postAddCourse)
+// for get course details
+router.get('/course-details/:course_id',adminAuth,getCourseDetails)
+// for add course video lecture 
+router.post('/course-add-video-lecture/:course_id/:section_id',adminAuth,upload.single('video'),postAddCourseVideo)
+// for add course lecture file
+router.post('/course-add-lecture-file/:course_id/:section_id',adminAuth,upload.single('lecture_file'),postAddCourseFile)
+// for get course Enroll transaction
+router.get('/course-transaction',adminAuth,getCourseEnrollTransaction)
+// for get edit course
+router.get('/course-edit/:course_id',adminAuth,getEditCourse)
+// for post edit course
+router.post('/course-edit/:course_id',adminAuth,multiUpload.fields([{name:"course_thumbnail_image"},{name:"video"}]),editCourse)
+
+// -------------------------------------------------course-------------------------------------------------------
+
+
+
+//--------------------------------------------------teacher------------------------------------------------------
+// for get teacher
+router.get('/teacher',adminAuth,getTeacher)
+// for get add teacher
+router.get('/teacher-add',adminAuth,getAddTeacher)
+// for post add teacher
+router.post('/teacher-add',adminAuth,upload.single('teacher_image'),postAddTeacher)
+// for get edit teacher
+router.get('/teacher-edit/:teacher_id',adminAuth,getEditTeacher)
+// for post edit teacher
+router.post('/teacher-edit/:teacher_id',adminAuth,upload.single('teacher_image'),postEditTeacher)
+
+//--------------------------------------------------teacher------------------------------------------------------
+
+//--------------------------------------------------banner------------------------------------------------------
+// for get banner 
+router.get('/banner',adminAuth,getBanner)
+// for get edit banner
+router.get('/banner-edit/:banner_id',adminAuth,getEditBanner)
+// for post edit banner
+router.post('/banner-edit/:banner_id',adminAuth,upload.single('banner_image'),postEditBanner)
+
+//--------------------------------------------------banner------------------------------------------------------
 
 
 

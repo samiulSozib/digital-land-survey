@@ -1,0 +1,793 @@
+<%- include('../partials/navigation.ejs') %>
+
+
+        <section class="bg-gray-100 px-5 py-5">
+
+
+          <div class="grid grid-cols-1 md:grid-cols-6 mt-5 gap-10">
+
+            <div class="bg-white md:col-span-3 xl:col-span-4 rounded-lg">
+
+              <div class="flex justify-between items-center px-5 py-2 border-b-2">
+                <p><%= course.course_name %></p>
+                <button class="add-section secondary-btn">Add Section</button>
+              </div>
+              <div class="items-center px-5 py-2 border-b-2">
+                <p>Price: <%= course.course_price %></p>
+                <p>Discout: <%= course.course_discount %></p>
+                <p>Discout Price: <%= course.course_discount_price %></p>
+                <p>Description:</p>
+                <p><%= course.description %></p>
+                <p>Objective:</p>
+                <p><%= course.objective %></p>
+              </div>
+              <hr>
+              <div class="section-container">
+                <% for(let section of course.sections){ %>
+              <div class="px-2 py-2 grid gap-2">
+                <div style="display: flex; justify-content: space-between;align-items: center;">
+                  <h5><%= section.section_name %></h5>
+                  <div>
+                    <button style="margin-right: 5px;" class="edit-section" data-section-id="<%= section.section_id %>"><i class="fa-regular fa-pen-to-square"></i></button>
+                    <button style="margin-right: 5px;" data-section-id="<%= section.section_id %>" class="delete-course-section"><i style="color: darkred;" class="fa-regular fa-trash-can"></i></button>
+                  </div>
+                </div>
+                <div style="display: flex; justify-content: space-between;align-items: center;">
+                    <p class="font-bold">Video</p>
+                </div>
+                <div>
+                    <table class="table-auto text-xs md:text-sm profile-table w-[300%] md:w-full shadow">
+                        <tr>
+                          <th style="width: 75%;">Link</th>
+                          <th style="width: 25%;">Action</th>
+                        </tr>
+                        <tbody>
+                          <% for(let video of section.video_lectures){ %>
+                            <tr>
+                                <td><i class="fas fa-video"></i> <a href=""><%= video.video_lecture_name %></a></td>
+                                <td>
+                                    <div style="display: flex; justify-content: space-between;align-items: center; margin-left: 20px; margin-right: 20px;">
+                                        <button class="delete-lecture-video" data-video-id="<%= video.course_lecture_video_id %>"><i style="color: darkred;" class="fa-regular fa-trash-can"></i></button>
+                                        <span class="public-status-icon">
+                                          <% if (video.video_lecture_public) { %>
+                                            <button class="video-public-status-change" data-video-id="<%= video.course_lecture_video_id %>" data-video-is-public="<%= video.video_lecture_public %>">
+                                              <i style="color: green;" class="fa-solid fa-unlock"></i>
+                                            </button>
+                                          <% } else { %>
+                                            <button class="video-public-status-change" data-video-id="<%= video.course_lecture_video_id %>" data-video-is-public="<%= video.video_lecture_public %>">
+                                              <i style="color: red;" class="fa-solid fa-lock"></i>
+                                            </button>
+                                          <% } %>
+                                        </span>
+                                      </div>
+                                </td>
+                            </tr>
+                            <% } %>
+                        </tbody>
+                      </table>
+
+                      <div class="bg-gray-100" style="margin-top: 5px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc; border-radius: 10px; padding: 10px;">
+                        <form action="/course-add-video-lecture/<%= course.course_id %>/<%= section.section_id %>" method="post" enctype="multipart/form-data">
+                            <div class="mb-4" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center;">
+                                <div style="margin-right: 10px;">
+                                    <label for="video_lecture_name" class="block text-sm font-medium text-gray-700">Lecture Name</label>
+                                    <input type="text" id="video_lecture_name" name="video_lecture_name" class="w-full px-3 py-2 border rounded-lg" required>
+                                </div>
+                                <div>
+                                    <label for="video-file" class="block text-sm font-medium text-gray-700">Lecture Video</label>
+                                    <input id="video-file" name="video" type="file" class="custom-video-file-label" style="margin-top: 5px;" accept="video/*" required/>
+                                </div>
+                                <div class="flex my-2 justify-center"> <!-- Center the buttons -->
+                                    <button type="submit" class="bg-primaryColor text-white px-4 py-2 rounded-lg">Add</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                </div>
+                <hr>
+                <div style="display: flex; justify-content: space-between;align-items: center;">
+                    <p class="font-bold">File</p>
+                </div>
+                <div>
+                    <table class="table-auto text-xs md:text-sm profile-table w-[300%] md:w-full shadow">
+                        <tr>
+                          <th style="width: 75%;">Link</th>
+                          <th style="width: 25%;">Action</th>
+                        </tr>
+                        <tbody>
+                          <% for(let file of section.file_lectures){ %>
+                            <tr>
+                                <td><i class="fas fa-file"></i> <a href=""><%= file.file_lecture_name %></a></td>
+                                <td>
+                                  <div style="display: flex; justify-content: space-between;align-items: center; margin-left: 20px; margin-right: 20px;">
+                                    <button class="delete-lecture-file" data-file-id="<%= file.course_lecture_file_id %>"><i style="color: darkred;" class="fa-regular fa-trash-can"></i></button>
+                                    <span class="public-status-icon">
+                                      <% if (file.file_lecture_public) { %>
+                                        <button class="file-public-status-change" data-file-id="<%= file.course_lecture_file_id %>" data-file-is-public="<%= file.file_lecture_public %>">
+                                          <i style="color: green;" class="fa-solid fa-unlock"></i>
+                                        </button>
+                                      <% } else { %>
+                                        <button class="file-public-status-change" data-file-id="<%= file.course_lecture_file_id %>" data-file-is-public="<%= file.file_lecture_public %>">
+                                          <i style="color: red;" class="fa-solid fa-lock"></i>
+                                        </button>
+                                      <% } %>
+                                    </span>
+                                  </div>
+                                </td>
+                            </tr>
+                            <% } %>
+                        </tbody>
+                      </table>
+
+                      <div class="bg-gray-100" style="margin-top: 5px; display: flex; align-items: center; justify-content: center; border: 1px solid #ccc; border-radius: 10px; padding: 10px;">
+                        <form action="/course-add-lecture-file/<%= course.course_id %>/<%= section.section_id %>" method="post" enctype="multipart/form-data">
+                            <div class="mb-4" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center;">
+                                <div style="margin-right: 10px;">
+                                    <label for="file_lecture_name" class="block text-sm font-medium text-gray-700">File name</label>
+                                    <input type="text" id="file_lecture_name" name="file_lecture_name" class="w-full px-3 py-2 border rounded-lg" required>
+                                </div>
+                                <div>
+                                    <label for="file" class="block text-sm font-medium text-gray-700">Lecture File</label>
+                                    <input id="lecture-file" name="lecture_file" type="file" class="custom-lecture-file-label" style="margin-top: 5px;"/>
+                                </div>
+                                <div class="flex my-2 justify-center"> <!-- Center the buttons -->
+                                    <button type="submit" class="bg-primaryColor text-white px-4 py-2 rounded-lg">Add</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+              </div>
+              <hr>
+              <% } %>
+
+            </div>
+
+            </div>
+
+            <div class="bg-white md:col-span-3 xl:col-span-2 rounded-lg">
+
+              <div class="flex justify-between items-center px-5 py-4 border-b-2">
+                <p class="font-bold">Course Teacher</p>
+                <button class="add-teacher secondary-btn">Add Teacher</button>
+              </div>
+
+              
+                <div style="margin: 5px;">
+                    <table class="table-auto text-xs md:text-sm profile-table w-[300%] md:w-full shadow">
+                        <tr>
+                          <th>Item</th>
+                          <th>Action</th>
+                        </tr>
+                        <tbody>
+                          <% for(let teacher of course.teachers){ %>
+                            <tr>
+                                <td><%= teacher.teacher_name %></td>
+                                <td>
+                                  <button class="delete-course-teacher" data-course_teacher_id="<%= teacher.course_teacher_id %>"><i style="color: darkred;" class="fa-regular fa-trash-can"></i></button>
+                                </td>
+                            </tr>
+                           <% } %> 
+                        </tbody>
+                      </table>
+                        
+                </div>
+              
+
+
+            </div>
+
+          </div>
+
+        </section>
+    <!-- add section dialog -->
+    <div style="position: fixed; top: 50%;left: 50%;transform: translate(-50%, -50%);z-index: 1000; " id="add-section-dialog" class="add-section-dialog bg-black/50 h-full w-full flex justify-center items-center hidden">
+        <div class="bg-gray-100 border-2 border-primaryColor rounded-lg min-w-[350px] xl:min-w-[550px] p-5 max-h-full overflow-y-auto">
+          <h2 class="font-semibold mb-4">Add Section</h2>
+          <form id="section-form">
+            <div class="mb-4">
+              <label for="section_name" class="block text-sm font-medium text-gray-700">Section Name</label>
+              <input type="text" id="section_name" name="section_name" class="w-full px-3 py-2 border rounded-lg">
+            </div>
+            <div class="flex my-2 justify-end">
+              <button type="submit" class="bg-primaryColor text-white px-4 py-2 rounded-lg">Add</button>
+              <button id="close-dialog" class="ml-2 px-4 py-2 rounded-lg">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    <!-- add section dialog -->
+
+        <!-- edit section dialog -->
+        <div style="position: fixed; top: 50%;left: 50%;transform: translate(-50%, -50%);z-index: 1000; " id="edit-section-dialog" class="edit-section-dialog bg-black/50 h-full w-full flex justify-center items-center hidden">
+          <div class="bg-gray-100 border-2 border-primaryColor rounded-lg min-w-[350px] xl:min-w-[550px] p-5 max-h-full overflow-y-auto">
+            <h2 class="font-semibold mb-4">Edit Section</h2>
+            <form id="edit-section-form">
+              <div class="mb-4">
+                <label for="section_name" class="block text-sm font-medium text-gray-700">Section Name</label>
+                <input type="text" id="edit_section_name" name="edit_section_name" class="w-full px-3 py-2 border rounded-lg">
+              </div>
+              <div class="flex my-2 justify-end">
+                <button type="submit" class="bg-primaryColor text-white px-4 py-2 rounded-lg">Update</button>
+                <button id="close-edit-dialog" class="ml-2 px-4 py-2 rounded-lg">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      <!-- edit section dialog -->
+
+    <!-- add teacher dialog -->
+    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;" id="add-teacher-dialog" class="edit-section-dialog bg-black/50 h-full w-full flex justify-center items-center hidden">
+      <div class="bg-gray-100 border-2 border-primaryColor rounded-lg min-w-[350px] xl:min-w-[550px] p-5 max-h-full overflow-y-auto">
+        <h2 class="font-semibold mb-4">Add Teacher</h2>
+        <form id="add-teacher-form">
+          <div class="mb-4">
+            <label for="teacher_id" class="block text-sm font-medium text-gray-700">Select Teacher</label>
+            <select id="teacher_id" name="teacher_id" class="w-full px-3 py-2 border rounded-lg">
+              <% for(let teacher of teachers){ %>
+              <option value="<%= teacher.teacher_id %>"><%= teacher.teacher_name %></option>
+              <% } %>
+              <!-- Add more teacher options here -->
+            </select>
+          </div>
+          <div class="flex my-2 justify-end">
+            <button type="submit" class="bg-primaryColor text-white px-4 py-2 rounded-lg">Add</button>
+            <button id="close-add-teacher-dialog" class="ml-2 px-4 py-2 rounded-lg">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- add teacher dialog -->
+
+
+   
+
+    </div>
+
+</section>
+
+<!-- add section -->
+
+  <script>
+    // JavaScript to show and hide the dialog box
+    const addSectionButton = document.querySelector('.add-section');
+    const addSectionDialog = document.getElementById('add-section-dialog');
+    const closeDialogButton = document.getElementById('close-dialog');
+    const section_name = document.getElementById('section_name'); 
+
+
+    addSectionButton.addEventListener('click', () => {
+        addSectionDialog.classList.remove('hidden');
+    });
+
+    closeDialogButton.addEventListener('click', () => {
+        addSectionDialog.classList.add('hidden');
+    });
+
+    const sectionForm = document.querySelector('#section-form');
+    sectionForm.addEventListener('submit', async(event) => {
+        event.preventDefault();
+
+        const sectionName = section_name.value;
+
+
+        const dataToSend={
+            section_name:sectionName
+        }
+        const addSectionUrl = `/api/course/course-section-add/${'<%= course.course_id %>'}`;
+
+        try{
+            const response = await axios.post(addSectionUrl, dataToSend);
+
+            if(response.status!==200){
+                addSectionDialog.classList.add('hidden');
+                alert("Section Add Fail");
+            }else{
+                
+                addSectionDialog.classList.add('hidden');
+                alert("Section Add Success");
+                window.location.reload();
+            }
+        }catch(error){
+            console.error("Error:", error);
+            addSectionDialog.classList.add('hidden');
+            alert("Section Add Fail");
+        }
+    });
+
+</script>
+
+<!-- add section -->
+
+
+<!-- edit section -->
+
+<script>
+  // JavaScript to show and hide the dialog box
+  const editSectionButtons = document.querySelectorAll('.edit-section');
+  const editSectionDialog = document.getElementById('edit-section-dialog');
+  const closeEditDialogButton = document.getElementById('close-edit-dialog');
+  const edit_section_name = document.getElementById('edit_section_name'); 
+
+ let section_id
+
+  editSectionButtons.forEach((editButton) => {
+  editButton.addEventListener('click', () => {
+    section_id = editButton.getAttribute('data-section-id');
+    
+    editSectionDialog.classList.remove('hidden');
+  });
+});
+
+  closeEditDialogButton.addEventListener('click', () => {
+    editSectionDialog.classList.add('hidden');
+  });
+
+  const editSectionForm = document.querySelector('#edit-section-form');
+  editSectionForm.addEventListener('submit', async(event) => {
+      event.preventDefault();
+
+      const sectionName = edit_section_name.value;
+
+
+      const dataToSend={
+          section_name:sectionName
+      }
+      const editSectionUrl = `/api/course/course-section-edit/${'<%= course.course_id %>'}/${section_id}`;
+      //console.log(apiUrl)
+
+      try{
+          const response = await axios.post(editSectionUrl, dataToSend);
+
+          if(response.status!==200){
+              addSectionDialog.classList.add('hidden');
+              alert("Section Update Fail");
+          }else{
+              
+              addSectionDialog.classList.add('hidden');
+              alert("Section Update Success");
+              window.location.reload();
+          }
+      }catch(error){
+          console.error("Error:", error);
+          addSectionDialog.classList.add('hidden');
+          alert("Section Update Fail");
+      }
+  });
+
+</script>
+
+<!-- edit section -->
+
+
+<!-- add teacher -->
+
+<script>
+  // JavaScript to show and hide the dialog box
+  const addTeacherButton = document.querySelector('.add-teacher');
+  const addTeacherDialog = document.getElementById('add-teacher-dialog');
+  const closeAddTeacherDialogButton = document.getElementById('close-add-teacher-dialog');
+ 
+
+
+  addTeacherButton.addEventListener('click', () => {
+        addTeacherDialog.classList.remove('hidden');
+    });
+
+    closeAddTeacherDialogButton.addEventListener('click', () => {
+        addTeacherDialog.classList.add('hidden');
+    });
+
+  const addTeacherForm = document.querySelector('#add-teacher-form');
+  addTeacherForm.addEventListener('submit', async(event) => {
+      event.preventDefault();
+
+      const sectionName = edit_section_name.value;
+      const selectedTeacherId = document.getElementById('teacher_id').value;
+
+
+      const dataToSend={
+          teacher_id:selectedTeacherId
+      }
+      
+      const addTeacherUrl = `/api/course/course-teacher-add/${'<%= course.course_id %>'}`;
+      //console.log(addTeacherUrl)
+      try{
+          const response = await axios.post(addTeacherUrl, dataToSend);
+          //console.log(response)
+
+          if(response.status!==200){
+              addTeacherDialog.classList.add('hidden');
+              alert("Teacher Add Fail");
+          }else{
+              
+              addTeacherDialog.classList.add('hidden');
+              alert("Teacher Add Success");
+              window.location.reload();
+          }
+      }catch(error){
+          console.error("Error:", error);
+          addTeacherDialog.classList.add('hidden');
+          alert("Teacher Add Fail");
+      }
+  });
+
+</script>
+
+<!-- add teacher -->
+
+
+
+
+
+
+<!-- delete course section -->
+<script>
+  const course_section_delete_button = document.querySelectorAll('.delete-course-section');
+
+  course_section_delete_button.forEach((button) => {
+    button.addEventListener("click", async function (event) {
+      const section_id = this.getAttribute("data-section-id");
+     
+      const confirmed = confirm('Do you want to delete this section?');
+
+      if (!confirmed) {
+        return;
+      }
+
+      const apiUrl = `/api/course/course-section-delete/${section_id}`;
+
+      
+      try {
+        const response = await axios.delete(apiUrl);
+
+        console.log(response);
+
+        if (response.status !== 200) {
+          alert("API request failed");
+        } else {
+          const row = this.parentElement.parentElement.parentElement;
+          row.remove();
+          alert("Section delete success");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Section delete fail");
+      }
+    });
+  });
+
+</script>
+<!-- delete course section -->
+
+<!-- delete course lecture video -->
+<script>
+  const course_lecture_video_delete_button = document.querySelectorAll('.delete-lecture-video');
+
+  course_lecture_video_delete_button.forEach((button) => {
+    button.addEventListener("click", async function (event) {
+      const course_lecture_video_id = this.getAttribute("data-video-id");
+     
+      const confirmed = confirm('Do you want to delete this video lecture?');
+
+      if (!confirmed) {
+        return;
+      }
+
+      const apiUrl = `/api/course/course-lecture-video-delete/${course_lecture_video_id}`;
+
+      
+      try {
+        const response = await axios.delete(apiUrl);
+
+        console.log(response);
+
+        if (response.status !== 200) {
+          alert("API request failed");
+        } else {
+          const row = this.parentElement.parentElement.parentElement;
+          row.remove();
+          alert("Video Lecture delete success");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Video Lecture delete fail");
+      }
+    });
+  });
+
+</script>
+<!-- delete course lecture video -->
+
+
+<!-- delete course lecture file -->
+<script>
+  const course_lecture_file_delete_button = document.querySelectorAll('.delete-lecture-file');
+
+  course_lecture_file_delete_button.forEach((button) => {
+    button.addEventListener("click", async function (event) {
+      const course_lecture_file_id = this.getAttribute("data-file-id");
+     
+      const confirmed = confirm('Do you want to delete this lecture file?');
+
+      if (!confirmed) {
+        return;
+      }
+
+      const apiUrl = `/api/course/course-lecture-file-delete/${course_lecture_file_id}`;
+
+      
+      try {
+        const response = await axios.delete(apiUrl);
+
+        console.log(response);
+
+        if (response.status !== 200) {
+          alert("API request failed");
+        } else {
+          const row = this.parentElement.parentElement.parentElement;
+          row.remove();
+          alert("Lecture File delete success");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Lecture File delete fail");
+      }
+    });
+  });
+
+</script>
+<!-- delete course lecture file -->
+
+
+<!-- script for course lecture video public status change -->
+<script>
+  const video_public_status_button = document.querySelectorAll('.video-public-status-change');
+
+video_public_status_button.forEach((button) => {
+  button.addEventListener("click", async function (event) {
+    const course_lecture_video_id = this.getAttribute("data-video-id");
+    const current_public_status = this.getAttribute("data-video-is-public");
+    //console.log(instruments_orders_transaction_id + " " + current_verified_status);
+    const confirmed = confirm('Do you want to change public status?');
+
+    if (!confirmed) {
+      return;
+    }
+
+    const apiUrl = `/api/course/course-lecture-video-public-status?course_lecture_video_id=${course_lecture_video_id}`;
+    console.log(apiUrl)
+    const dataToSend = {
+      is_public: current_public_status == 0 ? 1 : 0,
+    };
+    try {
+      const response = await axios.post(apiUrl, dataToSend);
+
+      console.log(response);
+
+      if (response.status !== 200) {
+        alert("API request failed");
+      } else {
+        // Get the approval icon element
+        const approvalIcon = button.querySelector('.fa-solid');
+        // Update the icon based on the new approval status
+        if (current_public_status == 0) {
+          approvalIcon.style.color = 'green';
+          approvalIcon.className = 'fa-solid fa-unlock';
+        } else {
+          approvalIcon.style.color = 'red';
+          approvalIcon.className = 'fa-solid fa-lock';
+        }
+
+        alert("Successfully changed status");
+        this.setAttribute("data-video-is-public", current_public_status == 0 ? 1 : 0);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Verification change failed");
+    }
+  });
+});
+
+</script>
+
+<!-- script for course lecture video public status change -->
+
+<!-- script for course lecture file public status change -->
+<script>
+  const file_public_status_button = document.querySelectorAll('.file-public-status-change');
+
+file_public_status_button.forEach((button) => {
+  button.addEventListener("click", async function (event) {
+    const course_lecture_file_id = this.getAttribute("data-file-id");
+    const current_public_status = this.getAttribute("data-file-is-public");
+    //console.log(instruments_orders_transaction_id + " " + current_verified_status);
+    const confirmed = confirm('Do you want to change public status?');
+
+    if (!confirmed) {
+      return;
+    }
+
+    const apiUrl = `/api/course/course-lecture-file-public-status?course_lecture_file_id=${course_lecture_file_id}`;
+    console.log(apiUrl)
+    const dataToSend = {
+      is_public: current_public_status == 0 ? 1 : 0,
+    };
+    try {
+      const response = await axios.post(apiUrl, dataToSend);
+
+      console.log(response);
+
+      if (response.status !== 200) {
+        alert("API request failed");
+      } else {
+        // Get the approval icon element
+        const approvalIcon = button.querySelector('.fa-solid');
+        // Update the icon based on the new approval status
+        if (current_public_status == 0) {
+          approvalIcon.style.color = 'green';
+          approvalIcon.className = 'fa-solid fa-unlock';
+        } else {
+          approvalIcon.style.color = 'red';
+          approvalIcon.className = 'fa-solid fa-lock';
+        }
+
+        alert("Successfully changed status");
+        this.setAttribute("data-video-is-public", current_public_status == 0 ? 1 : 0);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Verification change failed");
+    }
+  });
+});
+
+</script>
+
+<!-- script for course lecture file public status change -->
+
+
+<!-- delete course teacher -->
+<script>
+  const course_teacher_delete_button = document.querySelectorAll('.delete-course-teacher');
+
+  course_teacher_delete_button.forEach((button) => {
+    button.addEventListener("click", async function (event) {
+      const course_teacher_id = this.getAttribute("data-course_teacher_id");
+     
+      const confirmed = confirm('Do you want to delete this course teacher?');
+
+      if (!confirmed) {
+        return;
+      }
+
+      const apiUrl = `/api/course/course-teacher-delete/${course_teacher_id}`;
+
+      
+      try {
+        const response = await axios.delete(apiUrl);
+
+        console.log(response);
+
+        if (response.status !== 200) {
+          alert("API request failed");
+        } else {
+          const row = this.parentElement.parentElement;
+          row.remove();
+          alert("Course Teacher delete success");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Course Teacher delete fail");
+      }
+    });
+  });
+
+</script>
+<!-- delete course teacher -->
+
+
+<!-- Header Section Script -->
+<script> 
+  // Menu toggle button 
+    const toggleButton = document.getElementById("toggle-button");
+    const toggleMenu = document.getElementById("toggle-menu");
+    var toggleCounter = 1;
+    toggleButton.onclick = function () {
+      toggleCounter++;
+      if(toggleCounter%2 == 0){
+        toggleMenu.classList.remove("hidden");
+        toggleMenu.classList.add("grid");
+      }
+      else{
+        toggleMenu.classList.remove("grid");
+        toggleMenu.classList.add("hidden");
+      }
+    }
+
+
+  </script>
+
+
+<!-- Accordion Script -->
+<script>
+  const accordionButtons = document.querySelectorAll('.accordion-button');
+  const accordionMenu = document.querySelectorAll('.menu-collapse');
+
+  accordionButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const accordionCollapse = button.nextElementSibling;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      accordionCollapse.classList.toggle('hidden');
+    });
+  });
+
+  // Set all accordion items to collapsed state by default
+  document.querySelectorAll('.menu-collapse').forEach(collapse => {
+    collapse.classList.add('hidden');
+  });
+
+
+</script>
+
+
+<!-- Table Script -->
+<script>
+  const tableButtons = document.querySelectorAll('.table-button');
+  const tableMenu = document.querySelectorAll('.table-collapse');
+  const tableClose = document.querySelectorAll('.table-close');
+
+  tableButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const tableCollapse = button.nextElementSibling;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      tableCollapse.classList.toggle('hidden');
+    });
+  });
+
+  tableClose.forEach(button => {
+    button.addEventListener('click', () => {
+      const tableCollapse = button.parentElement.parentElement.parentElement;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      tableCollapse.classList.toggle('hidden');
+    });
+  });
+
+</script>
+
+<script>
+  const tables = document.querySelectorAll('.table-collapse');
+  window.onclick = function (event) {
+  for (let table of tables){
+  if (event.target == table) {
+    table.classList.toggle('hidden');
+  }
+}
+};
+</script>
+
+
+
+
+<script>
+    $('#video-file').on('change', function(e) {
+      let filename = e.target.files[0].name
+      $(this).next('.custom-video-file-label').html(filename)
+  })
+  
+  
+  </script>
+
+<script>
+    $('#lecture-file').on('change', function(e) {
+      let filename = e.target.files[0].name
+      $(this).next('.custom-lecture-file-label').html(filename)
+  })
+  
+  
+  </script>
+
+</body>
+</html>

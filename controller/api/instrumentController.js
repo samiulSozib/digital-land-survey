@@ -122,7 +122,7 @@ exports.deleteInstrument = async (req, res, next) => {
 // post instrument order and make transaction 
 exports.postInstrumentOrder=async(req,res,next)=>{
     try{
-        let {instruments_orders_id,customer_id,instrument_id,quantity,total_price,order_name,order_mobile_number,order_address,account_number,
+        let {surveyor_id,customer_id,instrument_id,quantity,total_price,order_name,order_mobile_number,order_address,account_number,
             account_type,
             amount,
             transaction_id,
@@ -134,13 +134,13 @@ exports.postInstrumentOrder=async(req,res,next)=>{
                 return res.status(503).json({status:false, message:'Internal Server Error', instrument_order:{}})
             }
             try{
-                if(!instruments_orders_id){
-                    instruments_orders_id=null
+                if(!surveyor_id){
+                    surveyor_id=null
                 }else{
                     customer_id=null
                 }
-                const insert_instrument_order_query=`INSERT INTO instrument_order(instruments_orders_id,customer_id,instrument_id,quantity,total_price,order_name,order_mobile_number,order_address,order_status) VALUES (?,?,?,?,?,?,?,?,?)`
-                const values=[instruments_orders_id,customer_id,instrument_id,quantity,total_price,order_name,order_mobile_number,order_address,0]
+                const insert_instrument_order_query=`INSERT INTO instrument_order(surveyor_id,customer_id,instrument_id,quantity,total_price,order_name,order_mobile_number,order_address,order_status) VALUES (?,?,?,?,?,?,?,?,?)`
+                const values=[surveyor_id,customer_id,instrument_id,quantity,total_price,order_name,order_mobile_number,order_address,0]
                 const instrument_order=await queryAsync(insert_instrument_order_query,values)
                 const order_id=instrument_order.insertId
 

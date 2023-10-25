@@ -1,0 +1,140 @@
+<%- include('../partials/navigation.ejs') %>
+
+
+        <section class="bg-gray-100 px-5 py-5">
+
+          <form action="/teacher-edit/<%= teacher.teacher_id %>" method="POST" enctype="multipart/form-data">
+            <div class="flex gap-5 flex-wrap items-center">
+              
+              <div class="flex items-center">
+                <label for="dropzone-file" class="flex flex-col items-center justify-center border-2 border-gray-400 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                    <div class="flex flex-col items-center justify-center p-5">
+                        <% if(teacher.teacher_image){ %>
+                            <img src="<%= teacher.teacher_image %>" alt="" style="width: 100px; height: 75px;">
+                            <% } %>
+                    </div>
+                    <input name="teacher_image" class="teacher_image custom-teacher-image-label" type="file"  />
+                </label>
+              </div>
+
+            </div>
+
+            <div>
+              <p class="mt-5 mb-2 text-tColor2 font-semibold">Teacher Name</p>
+              <input class="bg-white w-full max-w-[500px] border-[1px] border-primaryColor first-line:appearance-none  rounded-md py-3 px-5 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" id="teacher_name" name="teacher_name" type="text" placeholder="Please enter teacher name" value="<%= teacher.teacher_name %>"/>
+            </div>
+
+            <div>
+                <p class="mt-5 mb-2 text-tColor2 font-semibold">Teacher Phone Number</p>
+                <input class="bg-white w-full max-w-[500px] border-[1px] border-primaryColor first-line:appearance-none  rounded-md py-3 px-5 text-gray-800 leading-tight focus:outline-none focus:shadow-outline" id="teacher_phone_number" name="teacher_phone_number" type="text" placeholder="Please enter teacher phone number" value="<%= teacher.teacher_phone_number %>"/>
+              </div>
+
+
+          
+            <div class="mt-5 font-semibold">
+              <button type="submit" class="secondary-btn">Update</button>
+            </div>
+
+          </form>
+
+        </section>
+    
+
+    </div>
+
+</section>
+
+
+
+
+
+<!-- Header Section Script -->
+<script> 
+  // Menu toggle button 
+    const toggleButton = document.getElementById("toggle-button");
+    const toggleMenu = document.getElementById("toggle-menu");
+    var toggleCounter = 1;
+    toggleButton.onclick = function () {
+      toggleCounter++;
+      if(toggleCounter%2 == 0){
+        toggleMenu.classList.remove("hidden");
+        toggleMenu.classList.add("grid");
+      }
+      else{
+        toggleMenu.classList.remove("grid");
+        toggleMenu.classList.add("hidden");
+      }
+    }
+
+
+  </script>
+
+
+<!-- Accordion Script -->
+<script>
+  const accordionButtons = document.querySelectorAll('.accordion-button');
+  const accordionMenu = document.querySelectorAll('.menu-collapse');
+
+  accordionButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const accordionCollapse = button.nextElementSibling;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      accordionCollapse.classList.toggle('hidden');
+    });
+  });
+
+  // Set all accordion items to collapsed state by default
+  document.querySelectorAll('.menu-collapse').forEach(collapse => {
+    collapse.classList.add('hidden');
+  });
+
+
+</script>
+
+
+<!-- Table Script -->
+<script>
+  const tableButtons = document.querySelectorAll('.table-button');
+  const tableMenu = document.querySelectorAll('.table-collapse');
+  const tableClose = document.querySelectorAll('.table-close');
+
+  tableButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const tableCollapse = button.nextElementSibling;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      tableCollapse.classList.toggle('hidden');
+    });
+  });
+
+  tableClose.forEach(button => {
+    button.addEventListener('click', () => {
+      const tableCollapse = button.parentElement.parentElement.parentElement;
+      button.setAttribute('aria-expanded', button.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+      tableCollapse.classList.toggle('hidden');
+    });
+  });
+
+</script>
+
+<script>
+  const tables = document.querySelectorAll('.table-collapse');
+  window.onclick = function (event) {
+  for (let table of tables){
+  if (event.target == table) {
+    table.classList.toggle('hidden');
+  }
+}
+};
+</script>
+
+<script>
+    $('.teacher_image').on('change', function(e) {
+      let filename = e.target.files[0].name
+      $(this).next('.custom-teacher-image-label').html(filename)
+  })
+  
+  
+  </script>
+
+</body>
+</html>

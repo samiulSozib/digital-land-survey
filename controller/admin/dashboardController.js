@@ -33,10 +33,12 @@ exports.getDashboard=async(req,res,next)=>{
                 const sum_order_transaction_query=`SELECT SUM(amount) as total FROM order_transaction`
                 const sum_surveyor_transaction_query=`SELECT SUM(amount) as total FROM surveyor_transaction`
                 const sum_appointment_transaction_query=`SELECT SUM(amount) as total FROM transaction`
+                const sum_course_enroll_transaction_query=`SELECT SUM(amount) as total FROM course_enroll_transaction`
 
                 const sum_order_transaction=await queryAsyncWithoutValue(sum_order_transaction_query)
                 const sum_surveyor_transaction=await queryAsyncWithoutValue(sum_surveyor_transaction_query)
                 const sum_appointment_transaction=await queryAsyncWithoutValue(sum_appointment_transaction_query)
+                const sum_course_enroll_transaction=await queryAsyncWithoutValue(sum_course_enroll_transaction_query)
 
 
                 db.commit((err)=>{
@@ -56,7 +58,8 @@ exports.getDashboard=async(req,res,next)=>{
                     appointments,
                     sum_order_transaction,
                     sum_surveyor_transaction,
-                    sum_appointment_transaction
+                    sum_appointment_transaction,
+                    sum_course_enroll_transaction
                 })
                 })
             }catch(e){

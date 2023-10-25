@@ -13,7 +13,9 @@ const {customerRegistration,
         getCustomerProfile,
         updateCustomerProfile,
         deleteCustomer,
-        changeCustomerPassword
+        changeCustomerPassword,
+        verifyCustomerCode,
+        resetCustomerPassword
         }=require('../../controller/api/customerController')
 
 // surveyor controller 
@@ -27,7 +29,10 @@ const {surveyorRegistration,
         surveyorTransactionVerificationChange,
         deleteSurveyor,
         changeSurveyorPassword,
-        getSurveyorByServiceIdAndDateAndSurveyorId
+        getSurveyorByServiceIdAndDateAndSurveyorId,
+        verifySurveyorCode,
+        resetSurveyorPassword,
+        updateSurveyorProfile
         }=require('../../controller/api/surveyorController')
 
 // our services
@@ -60,6 +65,30 @@ const {getAllsocial_media_link,deletesocial_media_link}=require('../../controlle
 const {getAllInstruments,getInstrumentById,deleteInstrument,postInstrumentOrder,instruments_ordersTransactionVerificationChange,changeOrderStatus}=require('../../controller/api/instrumentController')
 
 
+// course
+const {insertCourseSection,
+        getCourseBySurveyor,
+        getCourseByCustomer,
+        enrollCourse,
+        getCourseDetails,
+        courseEnrollTransactionVerificationChange,
+        editCourseSection,
+        deleteCourseSection,
+        deleteCourse,
+        deleteVideo,
+        deleteFile,
+        courseLecureVideoPublicStatusChange,
+        courseLecureFilePublicStatusChange,
+        insertCourseTeacher,
+        deleteCourseTeacher
+        }=require('../../controller/api/courseController')
+
+// teacher
+const {deleteTeacher}=require('../../controller/api/teacherController')
+
+
+// banner 
+const {getBanner}=require('../../controller/api/bannerController')
 
 
 // ----------------------------------------------------------location--------------------------------------------------------------
@@ -83,6 +112,10 @@ router.post('/customer/profile/update',upload.single('customer-profile-image'),u
 router.delete('/customer-delete',deleteCustomer)
 // for change password
 router.post('/customer-change-password',changeCustomerPassword)
+// for verify code
+router.post('/customer-verify-code',verifyCustomerCode)
+// for reset password
+router.post('/customer-reset-password',resetCustomerPassword)
 
 // ----------------------------------------------------------customer--------------------------------------------------------------
 
@@ -111,6 +144,13 @@ router.post('/surveyor/transaction-verification-change',surveyorTransactionVerif
 router.delete('/surveyor-delete',deleteSurveyor)
 // for surveyor change password
 router.post('/surveyor-change-password',changeSurveyorPassword)
+// for verify code
+router.post('/surveyor-verify-code',verifySurveyorCode)
+// for reset password
+router.post('/surveyor-reset-password',resetSurveyorPassword)
+// for update surveyor profile
+router.post('/surveyor/profile/update',upload.single('surveyor-profile-image'),updateSurveyorProfile)
+
 
 // ----------------------------------------------------------surveyor--------------------------------------------------------------
 
@@ -202,6 +242,55 @@ router.post('/instruments-orders-transaction-verify',instruments_ordersTransacti
 router.post('/instruments-orders-status-change',changeOrderStatus)
 
 // ----------------------------------------------------------instruments--------------------------------------------------------------
+
+
+
+// ----------------------------------------------------------course--------------------------------------------------------------
+// post course section
+router.post('/course/course-section-add/:course_id',insertCourseSection)
+// get course by surveyor_id
+router.get('/courses/surveyor',getCourseBySurveyor)
+// get course by customer_id
+router.get('/courses/customer',getCourseByCustomer)
+// for post course enroll
+router.post('/course/enroll',enrollCourse)
+// for course details by id
+router.get('/course-details',getCourseDetails)
+// for change course enroll verification status change
+router.post('/course-enroll-transaction-verify',courseEnrollTransactionVerificationChange)
+// for edit course section
+router.post('/course/course-section-edit/:course_id/:section_id',editCourseSection)
+// for section delete
+router.delete('/course/course-section-delete/:section_id',deleteCourseSection)
+// for course delete 
+router.delete('/course-delete/:course_id',deleteCourse)
+// for video lecture delete 
+router.delete('/course/course-lecture-video-delete/:course_lecture_video_id',deleteVideo)
+// for file lecture delete 
+router.delete('/course/course-lecture-file-delete/:course_lecture_file_id',deleteFile)
+// for course lecture video public status change
+router.post('/course/course-lecture-video-public-status',courseLecureVideoPublicStatusChange)
+// for course lecture file public status change
+router.post('/course/course-lecture-file-public-status',courseLecureFilePublicStatusChange)
+// post course teacher
+router.post('/course/course-teacher-add/:course_id',insertCourseTeacher)
+// for delete course teacher
+router.delete('/course/course-teacher-delete/:course_teacher_id',deleteCourseTeacher)
+
+// ----------------------------------------------------------course--------------------------------------------------------------
+
+// ----------------------------------------------------------teacher--------------------------------------------------------------
+// for delete teacher
+router.delete('/teacher-delete',deleteTeacher)
+
+// ----------------------------------------------------------teacher--------------------------------------------------------------
+
+
+// ----------------------------------------------------------banner--------------------------------------------------------------
+// for get banner
+router.get('/banner',getBanner)
+
+// ----------------------------------------------------------banner--------------------------------------------------------------
 
 
 

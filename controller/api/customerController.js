@@ -212,7 +212,7 @@ exports.getCustomerProfile=async(req,res,next)=>{
                         customer_address:customer[0].customer_address,
                         customer_createdAt:customer[0].customer_createdAt,
                         customer_updatedAt:customer[0].customer_updatedAt,
-                        division:{
+                        location:{
                             division_id:customer[0].division_id,
                             division_name:customer[0].division_name,
                             division_createdAt:customer[0].division_createdAt,
@@ -441,3 +441,92 @@ exports.changeCustomerPassword = async (req, res, next) => {
         return res.status(503).json({ status: false, message: 'Internal Server Error', customer: {} });
     }
 };
+
+// verify code for forgot customer_password
+exports.verifyCustomerCode=async(req,res,next)=>{
+    try{
+        // const apiKey = '2p34tR8mVe6wcj55iJR84f7h3aWCSYcqFh697czL';
+        // const {to,code} = req.body;
+      
+      
+        // const options = {
+        //   method: 'POST',
+        //   url: 'https://api.sms.net.bd/sendsms',
+        //   formData: {
+        //     api_key: apiKey,
+        //     msg: code,
+        //     to: to,
+        //   },
+        // };
+      
+        // request(options, function (error, response, body) {
+        //   if (error) {
+        //     res.status(500).send({
+        //       status:'false',
+        //       message:'Error sending SMS',
+        //       data:''
+        //     });
+        //     return;
+        //   }
+        //   console.log('SMS sent:', body);
+        //   res.send({
+        //     status:'true',
+        //     message:'SMS send Successfully',
+        //     data:body
+        //   });
+        // });
+        
+    }catch(e){
+        console.log(e);
+        return res.status(503).json({ status: 'false', message: 'Internal Server Error', customer: {} }); 
+    }
+}
+
+
+// reset customer_password
+exports.resetCustomerPassword=async(req,res,next)=>{
+    try{
+        let {customer_mobile_number,customer_password,confirm_customer_password}=req.body
+        db.beginTransaction(async(err)=>{
+            if (err) {
+                return res.status(503).json({ status: 'false', message: 'Internal Server Error', customer: {} });
+            }
+
+            try{
+                const get_customer_query=`SELECT * FROM customers 
+                                WHERE customer_mobile_number = ?`
+                const customer=await queryAsync(get_customer_query,[customer_mobile_number])
+                if(customer.length===0){
+                    return res.status(200).json({ status: 'false', message: 'No customer found with phone number', customer: {} });
+                }
+
+                if(customer_password!=confirm_customer_password){
+                    return res.status(200).json({ status: 'false', message: 'Wrong customer_password. The customer_password you entered does not match.', customer: {} });
+                }
+
+                customer_password=await bcrypt.hash(customer_password,10)
+                const update_customer_query = 'UPDATE customers SET customer_password = ? WHERE customer_mobile_number = ?';
+                const updateValues = [customer_password, customer_mobile_number];
+                await queryAsync(update_customer_query, updateValues);
+                const updated_customer=await queryAsync(get_customer_query,[customer_mobile_number])
+                db.commit((err) => {
+                    if (err) {
+                        db.rollback(() => {
+                            return res.status(500).json({ status: 'false', message: 'Failed to reset customer customer_password', customer: {} });
+                        });
+                    }
+
+                    return res.status(200).json({ status: 'true', message: '', customer: updated_customer[0] });
+                });
+
+            }catch(e){
+                console.log(e);
+                db.rollback();
+                return res.status(503).json({ status: 'false', message: 'Internal Server Error', customer: {} });
+            }
+        })
+    }catch(e){
+        console.log(e);
+        return res.status(503).json({ status: 'false', message: 'Internal Server Error', customer: {} }); 
+    }
+}

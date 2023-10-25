@@ -506,6 +506,95 @@ exports.getSurveyorById = async (req, res, next) => {
     }
 };
 
+// update surveyor profile
+exports.updateSurveyorProfile = async (req, res, next) => {
+    try {
+        const id = req.query.surveyor_id;
+        let {name,mobile_number,division,district,upzila,address}=req.body
+
+        db.beginTransaction(async (err) => {
+            if (err) {
+                return res.status(503).json({ status: false, message: 'Internal Server Error', surveyor: {} });
+            }
+
+            try {
+                const get_surveyor_query = 'SELECT * FROM surveyors WHERE surveyor_id = ?';
+                const existing_surveyor = await queryAsync(get_surveyor_query, [id]);
+                console.log(existing_surveyor)
+                if (existing_surveyor.length === 0) {
+                    return res.status(200).json({ status: false, message: 'No surveyor found', surveyor: {} });
+                }
+
+                let image=existing_surveyor[0].surveyor_image
+                if(req.file){
+                    image=`${base_url}/uploads/${req.file.filename}`
+                }
+
+                const update_surveyor_query = 'UPDATE surveyors SET surveyor_name = ?,surveyor_image=?, surveyor_mobile_number = ?,surveyor_division = ?, surveyor_district = ?,surveyor_upzila=?, surveyor_address=? WHERE surveyor_id = ?';
+                const updateValues = [name,image, mobile_number,division,district,upzila,address, id];
+                await queryAsync(update_surveyor_query, updateValues);
+
+                const get_updated_surveyor_query = `SELECT s.*,
+                d.*,
+                di.*,
+                u.*
+                FROM surveyors as s
+                INNER JOIN divisions as d ON s.surveyor_division=d.division_id
+                INNER JOIN districts as di ON s.surveyor_district=di.district_id
+                INNER JOIN upzilas as u ON s.surveyor_upzila=u.upzila_id WHERE s.surveyor_id = ?`;
+                const surveyor = await queryAsync(get_updated_surveyor_query, [id]);
+                //console.log(surveyor)
+                const nestedJsonData={
+                    data:{
+                        surveyor_id:surveyor[0].surveyor_id,
+                        surveyor_name:surveyor[0].surveyor_name,
+                        surveyor_image:surveyor[0].surveyor_image,
+                        surveyor_mobile_number:surveyor[0].surveyor_mobile_number,
+                        surveyor_password:surveyor[0].surveyor_password,
+                        surveyor_address:surveyor[0].surveyor_address,
+                        surveyor_createdAt:surveyor[0].surveyor_createdAt,
+                        surveyor_updatedAt:surveyor[0].surveyor_updatedAt,
+                        division:{
+                            division_id:surveyor[0].division_id,
+                            division_name:surveyor[0].division_name,
+                            division_createdAt:surveyor[0].division_createdAt,
+                            division_updatedAt:surveyor[0].division_updatedAt,
+                            district:{
+                                district_id:surveyor[0].district_id,
+                                district_name:surveyor[0].district_name,
+                                district_createdAt:surveyor[0].district_createdAt,
+                                district_updatedAt:surveyor[0].district_updatedAt,
+                                upzila:{
+                                    upzila_id:surveyor[0].upzila_id,
+                                    upzila_name:surveyor[0].upzila_name,
+                                    upzila_createdAt:surveyor[0].upzila_createdAt,
+                                    upzila_updatedAt:surveyor[0].upzila_updatedAt
+                                }
+                            },
+                        },
+                    }
+                }
+                db.commit((err) => {
+                    if (err) {
+                        db.rollback(() => {
+                            return res.status(500).json({ status: false, message: 'Failed to update surveyor profile', surveyor: {} });
+                        });
+                    }
+
+                    return res.status(200).json({ status: true, message: '', surveyor: nestedJsonData.data });
+                });
+            } catch (e) {
+                console.log(e);
+                db.rollback();
+                return res.status(503).json({ status: false, message: 'Internal Server Error', surveyor: {} });
+            }
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(503).json({ status: false, message: 'Internal Server Error', surveyor: {} });
+    }
+};
+
 
 // create transaction for surveyor
 exports.createSurveyorTransaction=async(req,res,next)=>{
@@ -781,3 +870,93 @@ exports.changeSurveyorPassword = async (req, res, next) => {
         return res.status(503).json({ status: false, message: 'Internal Server Error', surveyor: {} });
     }
 };
+
+
+// verify code for forgot surveyor_password
+exports.verifySurveyorCode=async(req,res,next)=>{
+    try{
+        // const apiKey = '2p34tR8mVe6wcj55iJR84f7h3aWCSYcqFh697czL';
+        // const {to,code} = req.body;
+      
+      
+        // const options = {
+        //   method: 'POST',
+        //   url: 'https://api.sms.net.bd/sendsms',
+        //   formData: {
+        //     api_key: apiKey,
+        //     msg: code,
+        //     to: to,
+        //   },
+        // };
+      
+        // request(options, function (error, response, body) {
+        //   if (error) {
+        //     res.status(500).send({
+        //       status:'false',
+        //       message:'Error sending SMS',
+        //       data:''
+        //     });
+        //     return;
+        //   }
+        //   console.log('SMS sent:', body);
+        //   res.send({
+        //     status:'true',
+        //     message:'SMS send Successfully',
+        //     data:body
+        //   });
+        // });
+        
+    }catch(e){
+        console.log(e);
+        return res.status(503).json({ status: 'false', message: 'Internal Server Error', surveyor: {} }); 
+    }
+}
+
+
+// reset surveyor_password
+exports.resetSurveyorPassword=async(req,res,next)=>{
+    try{
+        let {surveyor_mobile_number,surveyor_password,confirm_surveyor_password}=req.body
+        db.beginTransaction(async(err)=>{
+            if (err) {
+                return res.status(503).json({ status: 'false', message: 'Internal Server Error', surveyor: {} });
+            }
+
+            try{
+                const get_surveyor_query=`SELECT * FROM surveyors 
+                                WHERE surveyor_mobile_number = ?`
+                const surveyor=await queryAsync(get_surveyor_query,[surveyor_mobile_number])
+                if(surveyor.length===0){
+                    return res.status(200).json({ status: 'false', message: 'No surveyor found with phone number', surveyor: {} });
+                }
+
+                if(surveyor_password!=confirm_surveyor_password){
+                    return res.status(200).json({ status: 'false', message: 'Wrong surveyor_password. The surveyor_password you entered does not match.', surveyor: {} });
+                }
+
+                surveyor_password=await bcrypt.hash(surveyor_password,10)
+                const update_surveyor_query = 'UPDATE surveyors SET surveyor_password = ? WHERE surveyor_mobile_number = ?';
+                const updateValues = [surveyor_password, surveyor_mobile_number];
+                await queryAsync(update_surveyor_query, updateValues);
+                const updated_surveyor=await queryAsync(get_surveyor_query,[surveyor_mobile_number])
+                db.commit((err) => {
+                    if (err) {
+                        db.rollback(() => {
+                            return res.status(500).json({ status: 'false', message: 'Failed to reset surveyor surveyor_password', surveyor: {} });
+                        });
+                    }
+
+                    return res.status(200).json({ status: 'true', message: '', surveyor: updated_surveyor[0] });
+                });
+
+            }catch(e){
+                console.log(e);
+                db.rollback();
+                return res.status(503).json({ status: 'false', message: 'Internal Server Error', surveyor: {} });
+            }
+        })
+    }catch(e){
+        console.log(e);
+        return res.status(503).json({ status: 'false', message: 'Internal Server Error', surveyor: {} }); 
+    }
+}
